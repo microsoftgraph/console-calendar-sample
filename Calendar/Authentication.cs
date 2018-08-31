@@ -18,6 +18,7 @@ namespace Helpers
 
         private static PublicClientApplication identityClientApp = new PublicClientApplication(clientId);
         private static GraphServiceClient graphClient = null;
+        private static AuthenticationResult authResult;
 
         public static GraphServiceClient GetAuthenticatedClient()
         {
@@ -46,19 +47,21 @@ namespace Helpers
 
         private static async Task<string> getTokenForUserAsync()
         {
-            AuthenticationResult authResult = null;
-
-            try
+            if (authResult == null)
             {
-                IEnumerable<IAccount> account = await identityClientApp.GetAccountsAsync();
-                authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
-                return authResult.AccessToken;
+                try
+                {
+                    IEnumerable<IAccount> account = await identityClientApp.GetAccountsAsync();
+                    authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
+                    return authResult.AccessToken;
+                }
+                catch (MsalUiRequiredException error)
+                {
+                    authResult = await identityClientApp.AcquireTokenAsync(scopes);
+                    return authResult.AccessToken;
+                }
             }
-            catch(MsalUiRequiredException error)
-            {
-                authResult = await identityClientApp.AcquireTokenAsync(scopes);
-                return authResult.AccessToken;
-            }
+            return authResult.AccessToken;
         }
 
     }
