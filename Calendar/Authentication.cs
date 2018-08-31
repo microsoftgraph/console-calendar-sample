@@ -13,7 +13,7 @@ namespace Helpers
     {
         private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
         private static string[] scopes = {
-            "User.Read"
+            "https://graph.microsoft.com/User.Read"
         };
 
         private static PublicClientApplication identityClientApp = new PublicClientApplication(clientId);
@@ -26,7 +26,7 @@ namespace Helpers
                 try
                 {
                     graphClient = new GraphServiceClient(
-                        "https://graph.microsoft.com",
+                        "https://graph.microsoft.com/v1.0",
                         new DelegateAuthenticationProvider(
                                 async (requestMessage) =>
                                 {
