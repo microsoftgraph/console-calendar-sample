@@ -51,7 +51,6 @@ namespace Helpers
             try
             {
                 IEnumerable<IAccount> account = await identityClientApp.GetAccountsAsync();
-                Console.WriteLine(account.GetType());
                 authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
                 return authResult.AccessToken;
             }
