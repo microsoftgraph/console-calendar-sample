@@ -8,47 +8,50 @@ namespace Calendar
 {
     class Program
     {
+        private static GraphServiceClient graphClient;
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            graphClient = Authentication.GetAuthenticatedClient();
+            Console.WriteLine("Available commands: info, exit");
+            var command = "";
 
-            RunAsync().GetAwaiter().GetResult();
-            Console.ReadKey();
+            do
+            {
+                Console.Write("> ");
+                command = Console.ReadLine();
+                RunAsync(command).GetAwaiter().GetResult();
+            }
+            while (command != "exit");
         }
 
-        public static async Task<User> GetMeAsync()
+        static async Task RunAsync(string command)
         {
-            User currentUserObject = null;
+            switch (command)
+            {
+                case "info":
+                    await GetMeAsync();
+                    break;
+                default:
+                    Console.WriteLine("Command not available");
+                    break;
+            }
+        }
+
+        public static async Task GetMeAsync()
+        {
+            User user = null;
             try
             {
-                var graphClient = Authentication.GetAuthenticatedClient();
-                currentUserObject = await graphClient.Me.Request().GetAsync();
+                user = await graphClient.Me.Request().GetAsync();
 
-                Debug.WriteLine("Got user: " + currentUserObject.DisplayName);
-                return currentUserObject;
+                Console.WriteLine($"Got user: {user.DisplayName}");
             }
 
             catch (ServiceException e)
             {
                 Debug.WriteLine("We could not get the current user: " + e.Error.Message);
-                return null;
             }
-        }
-
-        static async Task RunAsync()
-        {
-            //Display information about the current user
-            Console.WriteLine("Get My Profile");
-            Console.WriteLine();
-
-            var me = await GetMeAsync();
-
-            Console.WriteLine(me.DisplayName);
-            Console.WriteLine("User:{0}\t\tEmail:{1}", me.DisplayName, me.Mail);
-            Console.WriteLine();
-
-            //Display information about people near me
-            Console.WriteLine("Get People Near Me");
         }
     }
 }

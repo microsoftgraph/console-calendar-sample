@@ -13,8 +13,8 @@ namespace Helpers
     {
         private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
         private static string[] scopes = {
-            "https://graph.microsoft.com/User.Read"
-        };
+            "https://graph.microsoft.com/User.Read",
+         };
 
         private static PublicClientApplication identityClientApp = new PublicClientApplication(clientId);
         private static GraphServiceClient graphClient = null;
