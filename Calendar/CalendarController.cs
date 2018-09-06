@@ -28,8 +28,10 @@ namespace Calendar
 
             try
             {
-                Event newEvent = new Event();
-                newEvent.Subject = subject;
+                Event newEvent = new Event
+                {
+                    Subject = subject
+                };
 
                 scheduledEvent = await graphClient
                     .Me
@@ -52,9 +54,10 @@ namespace Calendar
         {
             Event updatedEvent = null;
             Attendee room = new Attendee();
-            EmailAddress email = new EmailAddress();
-
-            email.Address = resourceMail;
+            EmailAddress email = new EmailAddress
+            {
+                Address = resourceMail
+            };
             room.Type = AttendeeType.Resource;
             room.EmailAddress = email;
 
@@ -78,6 +81,56 @@ namespace Calendar
             {
                 Console.WriteLine(error.Message);
             }
+            return updatedEvent;
+        }
+
+        public async Task<Event> SetRecurrentAsync(string eventId)
+        {
+            Event updatedEvent = null;
+
+            Event eventObj = new Event();
+
+            RecurrencePattern pattern = new RecurrencePattern
+            {
+                Type = RecurrencePatternType.Daily,
+                Interval = 1
+            };
+
+            List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
+            daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
+            pattern.DaysOfWeek = daysOfWeek;
+
+            RecurrenceRange range = new RecurrenceRange
+            {
+                Type = RecurrenceRangeType.EndDate,
+                StartDate = new Date(2018, 11, 6),
+                EndDate = new Date(2018, 11, 8)
+            };
+
+            PatternedRecurrence recurrence = new PatternedRecurrence
+            {
+                Pattern = pattern,
+                Range = range
+            };
+
+            eventObj.Recurrence = recurrence;
+
+            try
+            {
+                
+                updatedEvent = await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Request()
+                    .UpdateAsync(eventObj);
+
+                Console.WriteLine($">>> {updatedEvent}");
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+
             return updatedEvent;
         }
     }

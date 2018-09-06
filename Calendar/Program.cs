@@ -17,7 +17,7 @@ namespace Calendar
             graphClient = Authentication.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
 
-            Console.WriteLine("Available commands: info, schedule, book, exit");
+            Console.WriteLine("Available commands: info, schedule, book, set-recurrent, exit");
             var command = "";
 
             do
@@ -49,6 +49,13 @@ namespace Calendar
                     var resourceEmail = Console.ReadLine();
 
                     await cal.BookRoomAsync(eventId, resourceEmail);
+                    break;
+
+                case "set-recurrent":
+                    var updatedEvent = await cal.SetRecurrentAsync(eventId);
+                    Console.WriteLine("***");
+                    Console.WriteLine(updatedEvent);
+                    Console.WriteLine("***");
                     break;
                 default:
                     Console.WriteLine("You've done it! You discovered Drake's Fortune.");
