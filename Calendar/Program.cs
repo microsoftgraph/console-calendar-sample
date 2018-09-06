@@ -57,6 +57,10 @@ namespace Calendar
                     Console.WriteLine(updatedEvent);
                     Console.WriteLine("***");
                     break;
+                case "set-allday":
+                    var allDayLong = await cal.SetAlldayAsync(eventId);
+                    Console.WriteLine(allDayLong.IsAllDay);
+                    break;
                 default:
                     Console.WriteLine("You've done it! You discovered Drake's Fortune.");
                     break;
