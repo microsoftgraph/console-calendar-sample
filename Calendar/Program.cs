@@ -10,13 +10,14 @@ namespace Calendar
     {
         private static GraphServiceClient graphClient;
         private static CalendarController cal;
+        private static string eventId = "";
 
         static void Main(string[] args)
         {
             graphClient = Authentication.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
 
-            Console.WriteLine("Available commands: info, schedule, exit");
+            Console.WriteLine("Available commands: info, schedule, book, exit");
             var command = "";
 
             do
@@ -30,6 +31,7 @@ namespace Calendar
 
         private static async Task runAsync(string command)
         {
+
             switch (command)
             {
                 case "info":
@@ -39,7 +41,14 @@ namespace Calendar
                     Console.WriteLine("Enter the subject of your meeting");
                     var subject = Console.ReadLine();
 
-                    await cal.ScheduleMeetingAsync(subject);
+                    Event scheduledEvent = await cal.ScheduleMeetingAsync(subject);
+                    eventId = scheduledEvent.Id;
+                    break;
+                case "book":
+                    Console.WriteLine("Enter the room's email address");
+                    var resourceEmail = Console.ReadLine();
+
+                    await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
                 default:
                     Console.WriteLine("You've done it! You discovered Drake's Fortune.");
