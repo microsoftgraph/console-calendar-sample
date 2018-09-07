@@ -172,5 +172,24 @@ namespace Calendar
 
             return updatedEvent;
         }
+
+        public async Task AcceptAsync(string eventId)
+        {
+            try
+            {
+                await graphClient
+                      .Me
+                      .Events[eventId]
+                      .Accept()
+                      .Request()
+                      .PostAsync();
+                    
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
