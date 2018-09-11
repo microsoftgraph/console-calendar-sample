@@ -15,13 +15,18 @@ namespace Calendar
             RunAsync().GetAwaiter().GetResult();
             Console.ReadKey();
         }
-
+        /// <summary>
+        /// Gets a User from Microsoft Graph
+        /// </summary>
+        /// <returns>A User object</returns>
         public static async Task<User> GetMeAsync()
         {
             User currentUser = null;
             try
             {
                 var graphClient = Authentication.GetAuthenticatedClient();
+
+                // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();
 
                 return currentUser;
