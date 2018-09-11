@@ -4,10 +4,10 @@
 In this lab you will create a .NET application, configured with Azure Active Directory (Azure AD) for authentication and authorization using Microsoft Authentication Library (MSAL).
 
 ## In this lab
-- [Exercise 1: Create a .NET CLI application]()
-- [Exercise 2: Register a native application with the Application Registration Portal]()
-- [Exercise 3: Extend the app for Azure AD Authentication]()
-- [Exercise 4: Extend the app for Microsoft Graph]()
+- [Exercise 1: Create a CLI application](#create-cli-application)
+- [Exercise 2: Register a native application with the Application Registration Portal](#exercise-2-register-a-native-application-with-the-application-registration-portal)
+- [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
+- [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
 
 ## Prerequisites
 
