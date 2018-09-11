@@ -7,9 +7,9 @@ In this lab you will create a .NET Core CLI application, configured with Azure A
 * [Lab manual]()
 
 ## Demos
-[Create a CLI app]()
-[Register application with the Application Registration Portal]()
-[Use Microsoft Graph to get user information]()
+- [Create a CLI app]()
+- [Register application with the Application Registration Portal]()
+- [Use Microsoft Graph to get user information]()
 
 ## Contributors
 
