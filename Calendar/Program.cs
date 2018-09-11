@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Helpers;
 using Microsoft.Graph;
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Calendar
 {
