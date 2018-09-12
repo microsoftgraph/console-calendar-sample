@@ -64,25 +64,25 @@ Edit the **app.config** file, and immeadiately before the `/configuration` eleme
 </appSettings>
 ```
 
-## Add Authentication.cs
-1. Add a class to the project named **Authentication** This class will be responsible for authenticating using the Microsoft Authentication Library (MSAL), which is the
+## Add GraphClientServiceProvider.cs
+1. Add a class to the project named **GraphClientServiceProvider** This class will be responsible for authenticating using the Microsoft Authentication Library (MSAL), which is the
 Microsoft.Identity.Client package that we installed. For separation of concerns, change the **namespace** of this class to **Helpers**
 
 2. Replace the `using` statement at the top of the file
 ```csharp
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 ```
 
 3. Replace the `class` declaration with the following
 ```csharp
-class Authentication
+class GraphClientServiceProvider
     {
         // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
         private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
@@ -146,7 +146,7 @@ class Authentication
     }
 ```
 
-## Excercise 4: Extend the app for Microsoft Graph
+## Exercise 4: Extend the app for Microsoft Graph
 In this exercise you will incorporate the Microsoft Graph into the application. For this application, you will use the [Microsoft Graph Client Library for .NET](https://github.com/microsoftgraph/msgraph-sdk-dotnet) to make calls to Microsoft Graph.
 Add the following code snippet below **Main** in `Program.cs`
 
