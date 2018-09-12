@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Graph;
+﻿using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Helpers
 {
-    class Authentication
+    class GraphServiceClientProvider
     {
         // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
         private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();

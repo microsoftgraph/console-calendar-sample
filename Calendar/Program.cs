@@ -24,7 +24,7 @@ namespace Calendar
             User currentUser = null;
             try
             {
-                var graphClient = Authentication.GetAuthenticatedClient();
+                var graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
 
                 // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();
@@ -43,7 +43,14 @@ namespace Calendar
         {
             var me = await GetMeAsync();
 
-            Console.WriteLine($"{me.DisplayName} logged in.");
+            if (me != null)
+            {
+                Console.WriteLine($"{me.DisplayName} logged in.");
+            } else
+            {
+                Console.WriteLine("Did not find user");
+            }
+
             Console.WriteLine();
         }
     }
