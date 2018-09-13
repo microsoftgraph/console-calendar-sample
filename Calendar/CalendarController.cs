@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Graph;
+using System;
 using System.Threading.Tasks;
-using Microsoft.Graph;
 
 namespace Calendar
 {
@@ -29,6 +26,18 @@ namespace Calendar
 
             try
             {
+                /**
+                 * This is the same as a post request 
+                 * 
+                 * POST: https://graph.microsoft.com/v1.0/me/events
+                 * Request Body
+                 * {
+                 *      "subject": <event-subject>
+                 * }
+                 * 
+                 * Learn more about the properties of an Event object in the link below
+                 * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/event
+                 * */
                 Event calendarEvent = await graphClient
                     .Me
                     .Events
