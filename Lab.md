@@ -8,6 +8,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 2: Register a native application with the Application Registration Portal](#exercise-2-register-a-native-application-with-the-application-registration-portal)
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
+- [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
 
 ## Prerequisites
 
@@ -196,4 +197,123 @@ Replace the **Main** function with the following
 ```
 
 Press **Ctrl + F5** to run the application or **Debug > Start Debugging** to run the application in debug mode. If everything is working fine a terminal window will show and prompt you to log in.
+
+## Exercise 5: Schedule an event with Graph SDK
+1. In this exercise you will schedule a meeting using the **Graph SDK**. Create a class called **CalendarController**, this class is going to abstract the Graph SDK  functionality.
+
+2. Before you go on, give your application permissions to interact with the Calendar. Go to the [developer portal](https://apps.dev.microsoft.com/#/application/fb43c824-ceab-43f8-b079-e70d8224c0a1)
+   scroll down to **Microsoft Graph Permissions**. Click on **Add** at **Delegated Permissions** and select **Calendars.ReadWrite**
+
+3. In the `GraphClientServiceProvider` class you created in the previous exercise replace the **scope** variable declaration with the following
+```csharp
+        private static string[] scopes = {
+            "https://graph.microsoft.com/User.Read",
+            "https://graph.microsoft.com/Calendars.ReadWrite"
+        };
+```
+
+2. Replace the `using` statement at the top of the file
+```csharp
+using Microsoft.Graph;
+using System;
+using System.Threading.Tasks;
+```
+
+3. Replace the `class` declaration with the following
+```csharp
+class CalendarController
+    {
+        GraphServiceClient graphClient;
+
+        public CalendarController(GraphServiceClient client)
+        {
+            graphClient = client;
+        }
+
+        /// <summary>
+        /// Schedules a meeting.
+        /// </summary>
+        /// <param name="subject">Subject of the meeting</param>
+        /// <param name="address">Physical address of the meeting</param>
+        /// <returns></returns>
+        public async Task ScheduleMeetingAsync(string subject)
+        {
+            Event newEvent = new Event();
+            newEvent.Subject = subject;
+
+            try
+            {
+                /**
+                 * This is the same as a post request 
+                 * 
+                 * POST: https://graph.microsoft.com/v1.0/me/events
+                 * Request Body
+                 * {
+                 *      "subject": <event-subject>
+                 * }
+                 * 
+                 * Learn more about the properties of an Event object in the link below
+                 * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/event
+                 * */
+                Event calendarEvent = await graphClient
+                    .Me
+                    .Events
+                    .Request()
+                    .AddAsync(newEvent);
+
+                Console.WriteLine($"Added {calendarEvent.Subject}");
+            }
+            catch (ServiceException error)
+            {
+                Console.WriteLine(error.Message);
+            }
+
+        }
+    }
+```
+
+#### Putting things together
+1. Replace the content of the **Main** function with the following
+```csharp
+            graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+            cal = new CalendarController(graphClient);
+            RunAsync().GetAwaiter().GetResult();
+
+            Console.WriteLine("Available commands:\n" +
+                "\t 1. schedule \n " +
+                "\t exit");
+            var command = "";
+
+            do
+            {
+                Console.Write("> ");
+                command = Console.ReadLine();
+                if (command != "exit") runAsync(command).GetAwaiter().GetResult();
+            }
+            while (command != "exit");
+```
+This allows the user interact with your application through the command line interface.
+
+2. Add this function below **Main**
+```csharp
+       private static async Task runAsync(string command)
+        {
+            switch (command)
+            {
+                case "schedule":
+                    Console.WriteLine("Enter the subject of your meeting");
+                    var subject = Console.ReadLine();
+
+                    await cal.ScheduleMeetingAsync(subject);
+                    break;
+                default:
+                    Console.WriteLine("Invalid command");
+                    break;
+            }
+        }
+```
+This function uses the CalendarController to interact with the Graph SDK.
+
+
+
 
