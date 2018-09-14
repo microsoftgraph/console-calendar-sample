@@ -199,7 +199,7 @@ Replace the **Main** function with the following
 Press **Ctrl + F5** to run the application or **Debug > Start Debugging** to run the application in debug mode. If everything is working fine a terminal window will show and prompt you to log in.
 
 ## Exercise 5: Schedule an event with Graph SDK
-1. In this exercise you will schedule a meeting using the **Graph SDK**. Create a class called **CalendarController**, this class is going to abstract the Graph SDK  functionality.
+1. In this exercise you will schedule a meeting using the **Microsoft Graph client libray for .NET**. Create a class called **CalendarController**, this class is going to abstract the Graph SDK  functionality.
 
 2. Before you go on, give your application permissions to interact with the Calendar. Go to the [developer portal](https://apps.dev.microsoft.com/#/application/fb43c824-ceab-43f8-b079-e70d8224c0a1)
    scroll down to **Microsoft Graph Permissions**. Click on **Add** at **Delegated Permissions** and select **Calendars.ReadWrite**
