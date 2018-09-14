@@ -8,13 +8,45 @@ namespace Calendar
 {
     class Program
     {
+        private static GraphServiceClient graphClient;
+        private static CalendarController cal;
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Calendar CLI");
-
+            graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+            cal = new CalendarController(graphClient);
             RunAsync().GetAwaiter().GetResult();
-            Console.ReadKey();
+
+            Console.WriteLine("Available commands:\n" +
+                "\t 1. schedule \n " +
+                "\t exit");
+            var command = "";
+
+            do
+            {
+                Console.Write("> ");
+                command = Console.ReadLine();
+                if (command != "exit") runAsync(command).GetAwaiter().GetResult();
+            }
+            while (command != "exit");
         }
+
+        private static async Task runAsync(string command)
+        {
+            switch (command)
+            {
+                case "schedule":
+                    Console.WriteLine("Enter the subject of your meeting");
+                    var subject = Console.ReadLine();
+
+                    await cal.ScheduleMeetingAsync(subject);
+                    break;
+                default:
+                    Console.WriteLine("Invalid command");
+                    break;
+            }
+        }
+
         /// <summary>
         /// Gets a User from Microsoft Graph
         /// </summary>
@@ -46,7 +78,8 @@ namespace Calendar
             if (me != null)
             {
                 Console.WriteLine($"{me.DisplayName} logged in.");
-            } else
+            }
+            else
             {
                 Console.WriteLine("Did not find user");
             }
