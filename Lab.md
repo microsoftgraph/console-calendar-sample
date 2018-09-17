@@ -9,6 +9,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
 - [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
+- [Exercise 6: Set a recurrent event](#-exercise-6-set-a-recurrent-event)
 
 ## Prerequisites
 
@@ -315,5 +316,81 @@ This allows the user interact with your application through the command line int
 This function uses the CalendarController to interact with the Graph SDK.
 
 
+## Exercise 6: Set a recurrent event
+In this exercise you are going to set a recurring event.
 
+Add the code below to **GraphController.cs**
+```csharp
+        /// <summary>
+        /// Sets recurrent meetings
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public async Task SetRecurrentAsync(string eventId)
+        {
+            Event eventObj = new Event();
 
+            // Sets the event to happen every week
+            RecurrencePattern pattern = new RecurrencePattern
+            {
+                Type = RecurrencePatternType.Weekly,
+                Interval = 1
+            };
+
+            /**
+             * Sets the days of the week the event occurs.
+             * 
+             * For this sample it occurs every Monday
+             ***/
+            List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
+            daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
+            pattern.DaysOfWeek = daysOfWeek;
+           
+            /**
+             * Sets the duration of time the event will keep recurring.
+             * 
+             * In this case the event runs from Nov 6th to Nov 26th 2018.
+             **/
+            RecurrenceRange range = new RecurrenceRange
+            {
+                Type = RecurrenceRangeType.EndDate,
+                StartDate = new Date(2018, 11, 6),
+                EndDate = new Date(2018, 11, 26)
+            };
+
+            /**
+             * This brings together the recurrence pattern and the range to define the
+             * PatternedRecurrence property.
+             **/
+            PatternedRecurrence recurrence = new PatternedRecurrence
+            {
+                Pattern = pattern,
+                Range = range
+            };
+
+            eventObj.Recurrence = recurrence;
+
+            try
+            {            
+                await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Request()
+                    .UpdateAsync(eventObj);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
+```
+
+Add the following **case** statement in the **runAsync** method
+```csharp
+	case "set-recurrent":
+		Console.WriteLine("Enter the event id");
+		var eventId = Console.ReadLine();
+
+		await cal.SetRecurrentAsync(eventId);
+		break;
+```

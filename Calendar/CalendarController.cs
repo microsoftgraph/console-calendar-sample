@@ -54,27 +54,47 @@ namespace Calendar
 
         }
 
+        /// <summary>
+        /// Sets recurrent meetings
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         public async Task SetRecurrentAsync(string eventId)
         {
             Event eventObj = new Event();
 
+            // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
             {
-                Type = RecurrencePatternType.Daily,
+                Type = RecurrencePatternType.Weekly,
                 Interval = 1
             };
 
+            /**
+             * Sets the days of the week the event occurs.
+             * 
+             * For this sample it occurs every Monday
+             ***/
             List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
             daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
             pattern.DaysOfWeek = daysOfWeek;
-
+           
+            /**
+             * Sets the duration of time the event will keep recurring.
+             * 
+             * In this case the event runs from Nov 6th to Nov 26th 2018.
+             **/
             RecurrenceRange range = new RecurrenceRange
             {
                 Type = RecurrenceRangeType.EndDate,
                 StartDate = new Date(2018, 11, 6),
-                EndDate = new Date(2018, 11, 8)
+                EndDate = new Date(2018, 11, 26)
             };
 
+            /**
+             * This brings together the recurrence pattern and the range to define the
+             * PatternedRecurrence property.
+             **/
             PatternedRecurrence recurrence = new PatternedRecurrence
             {
                 Pattern = pattern,
@@ -93,7 +113,7 @@ namespace Calendar
             }
             catch (Exception error)
             {
-                throw error;
+                Console.WriteLine(error.Message);
             }
         }
     }
