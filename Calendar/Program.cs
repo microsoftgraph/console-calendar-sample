@@ -67,7 +67,6 @@ namespace Calendar
 
                 // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();
-
                 return currentUser;
             }
 
