@@ -56,7 +56,7 @@ namespace Calendar
         }
 
         /// <summary>
-        /// Books a room for the meeting
+        /// Books a room for the event
         /// </summary>
         /// <param name="eventId"></param>
         /// <param name="resourceMail"></param>

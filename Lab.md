@@ -321,7 +321,7 @@ In this exercise you are going to book a room for an event.
 1. In `CalendarController.cs` add the function below
 ```csharp
         /// <summary>
-        /// Books a room for the meeting
+        /// Books a room for the event
         /// </summary>
         /// <param name="eventId"></param>
         /// <param name="resourceMail"></param>
@@ -381,7 +381,7 @@ In this exercise you are going to book a room for an event.
  "\t 2. book-room\n " + 
 ```
 
-3. Add the following switch statement to the **runAsync** function in **Program.cs**
+3. Add the following **case** statement to the **runAsync** function in **Program.cs**
 ```csharp
 case "book-room":
     Console.WriteLine("Enter the event id");
