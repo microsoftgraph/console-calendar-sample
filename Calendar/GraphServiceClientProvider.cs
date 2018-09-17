@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 
 namespace Helpers
 {
-    class Authentication
+    class GraphServiceClientProvider
     {
         private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
         private static string[] scopes = {

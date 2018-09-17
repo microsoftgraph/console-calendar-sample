@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.Graph;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Graph;
 
 namespace Calendar
 {
@@ -50,44 +48,8 @@ namespace Calendar
             return scheduledEvent;
         }
 
-        public async Task<Event> BookRoomAsync(string eventId, string resourceMail)
+        public async Task SetRecurrentAsync(string eventId)
         {
-            Event updatedEvent = null;
-            Attendee room = new Attendee();
-            EmailAddress email = new EmailAddress
-            {
-                Address = resourceMail
-            };
-            room.Type = AttendeeType.Resource;
-            room.EmailAddress = email;
-
-            try
-            {
-                List<Attendee> attendees = new List<Attendee>();
-                Event patchEvent = new Event();
-
-                attendees.Add(room);
-                patchEvent.Attendees = attendees;
-
-                updatedEvent = await graphClient
-                    .Me
-                    .Events[eventId]
-                    .Request()
-                    .UpdateAsync(patchEvent);
-
-                Console.WriteLine(updatedEvent.Attendees.Count());
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine(error.Message);
-            }
-            return updatedEvent;
-        }
-
-        public async Task<Event> SetRecurrentAsync(string eventId)
-        {
-            Event updatedEvent = null;
-
             Event eventObj = new Event();
 
             RecurrencePattern pattern = new RecurrencePattern
@@ -116,22 +78,17 @@ namespace Calendar
             eventObj.Recurrence = recurrence;
 
             try
-            {
-                
-                updatedEvent = await graphClient
+            {            
+                await graphClient
                     .Me
                     .Events[eventId]
                     .Request()
                     .UpdateAsync(eventObj);
-
-                Console.WriteLine($">>> {updatedEvent}");
             }
             catch (Exception error)
             {
                 throw error;
             }
-
-            return updatedEvent;
         }
     }
 }

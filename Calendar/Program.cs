@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Helpers;
 using Microsoft.Graph;
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Calendar
 {
@@ -10,72 +10,88 @@ namespace Calendar
     {
         private static GraphServiceClient graphClient;
         private static CalendarController cal;
-        private static string eventId = "";
 
         static void Main(string[] args)
         {
-            graphClient = Authentication.GetAuthenticatedClient();
+            graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
+            RunAsync().GetAwaiter().GetResult();
 
-            Console.WriteLine("Available commands: info, schedule, book, set-recurrent, exit");
+            Console.WriteLine("Available commands:\n" +
+                "\t 1. schedule \n " +
+                "\t 2. set-recurrent \n " +
+                "\t exit");
             var command = "";
 
             do
             {
                 Console.Write("> ");
                 command = Console.ReadLine();
-                runAsync(command).GetAwaiter().GetResult();
+                if (command != "exit") runAsync(command).GetAwaiter().GetResult();
             }
             while (command != "exit");
         }
 
         private static async Task runAsync(string command)
         {
-
             switch (command)
             {
-                case "info":
-                    await getMeAsync();
-                    break;
                 case "schedule":
                     Console.WriteLine("Enter the subject of your meeting");
                     var subject = Console.ReadLine();
 
-                    Event scheduledEvent = await cal.ScheduleMeetingAsync(subject);
-                    eventId = scheduledEvent.Id;
+                    await cal.ScheduleMeetingAsync(subject);
                     break;
-                case "book":
-                    Console.WriteLine("Enter the room's email address");
-                    var resourceEmail = Console.ReadLine();
-
-                    await cal.BookRoomAsync(eventId, resourceEmail);
-                    break;
-
                 case "set-recurrent":
-                    var updatedEvent = await cal.SetRecurrentAsync(eventId);
-                    Console.WriteLine("***");
-                    Console.WriteLine(updatedEvent);
-                    Console.WriteLine("***");
+                    Console.WriteLine("Enter the event id");
+                    var eventId = Console.ReadLine();
+
+                    await cal.SetRecurrentAsync(eventId);
                     break;
                 default:
-                    Console.WriteLine("You've done it! You discovered Drake's Fortune.");
+                    Console.WriteLine("Invalid command");
                     break;
             }
         }
 
-        private static async Task getMeAsync()
+        /// <summary>
+        /// Gets a User from Microsoft Graph
+        /// </summary>
+        /// <returns>A User object</returns>
+        public static async Task<User> GetMeAsync()
         {
+            User currentUser = null;
             try
             {
-                User user = await graphClient.Me.Request().GetAsync();
+                var graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
 
-                Console.WriteLine($"Got user: {user.DisplayName}");
+                // Request to get the current logged in user object from Microsoft Graph
+                currentUser = await graphClient.Me.Request().GetAsync();
+
+                return currentUser;
             }
 
             catch (ServiceException e)
             {
                 Debug.WriteLine("We could not get the current user: " + e.Error.Message);
+                return null;
             }
+        }
+
+        static async Task RunAsync()
+        {
+            var me = await GetMeAsync();
+
+            if (me != null)
+            {
+                Console.WriteLine($"{me.DisplayName} logged in.");
+            }
+            else
+            {
+                Console.WriteLine("Did not find user");
+            }
+
+            Console.WriteLine();
         }
     }
 }
