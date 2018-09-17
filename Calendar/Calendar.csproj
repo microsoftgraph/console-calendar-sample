@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalendarController.cs" />
-    <Compile Include="GraphClientServiceProvider.cs" />
+    <Compile Include="GraphServiceClientProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
