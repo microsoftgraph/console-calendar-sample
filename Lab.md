@@ -9,6 +9,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
 - [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
+- [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-event)
 
 ## Prerequisites
 
@@ -314,6 +315,83 @@ This allows the user interact with your application through the command line int
 ```
 This function uses the CalendarController to interact with the Graph SDK.
 
+## Exercise 6: Book a room for an event
+In this exercise you are going to book a room for an event.
 
+1. In `CalendarController.cs` add the function below
+```csharp
+        /// <summary>
+        /// Books a room for the meeting
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="resourceMail"></param>
+        /// <returns></returns>
+        public async Task BookRoomAsync(string eventId, string resourceMail)
+        {
+            /**
+             * A room is an an attendee of type resource
+             * 
+             * Refer to the link below to learn more about the properties of the Attendee class
+             * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/attendee
+             **/
+            Attendee room = new Attendee();
+            EmailAddress email = new EmailAddress();
+            email.Address = resourceMail;
+            room.Type = AttendeeType.Resource;
+            room.EmailAddress = email;
 
+            List<Attendee> attendees = new List<Attendee>();
+            Event patchEvent = new Event();
 
+            attendees.Add(room);
+            patchEvent.Attendees = attendees;
+
+            try
+            {
+                /**
+                 * This is the same as making a patch request
+                 * 
+                 * PATCH https://graph.microsoft.com/v1.0/me/events/{id}
+                 * 
+                 * request body 
+                 * {
+                 *      attendees: [{
+                 *              emailAddress: {
+                 *                  "address": "email@address.com"
+                 *              },
+                 *              type: "resource"
+                 *          }
+                 *      ]
+                 * }
+                 * */
+                 await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Request()
+                    .UpdateAsync(patchEvent);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
+```
+2. Add the **book-room** command to the list of available commands in the **main** function
+```csharp
+ "\t 2. book-room\n " + 
+```
+
+3. Add the following switch statement to the **runAsync** function in **Program.cs**
+```csharp
+case "book-room":
+    Console.WriteLine("Enter the event id");
+    var eventId = Console.ReadLine();
+
+    Console.WriteLine("Enter the resource email");
+    var resourceEmail = Console.ReadLine();
+
+    await cal.BookRoomAsync(eventId, resourceEmail);
+    break;
+```
+
+This prompts the user to enter the **eventId** and **resource email**.

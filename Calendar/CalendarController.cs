@@ -1,5 +1,7 @@
 ﻿using Microsoft.Graph;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Calendar
@@ -51,6 +53,62 @@ namespace Calendar
                 Console.WriteLine(error.Message);
             }
 
+        }
+
+        /// <summary>
+        /// Books a room for the meeting
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="resourceMail"></param>
+        /// <returns></returns>
+        public async Task BookRoomAsync(string eventId, string resourceMail)
+        {
+            /**
+             * A room is an an attendee of type resource
+             * 
+             * Refer to the link below to learn more about the properties of the Attendee class
+             * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/attendee
+             **/
+            Attendee room = new Attendee();
+            EmailAddress email = new EmailAddress();
+            email.Address = resourceMail;
+            room.Type = AttendeeType.Resource;
+            room.EmailAddress = email;
+
+            List<Attendee> attendees = new List<Attendee>();
+            Event patchEvent = new Event();
+
+            attendees.Add(room);
+            patchEvent.Attendees = attendees;
+
+            try
+            {
+                /**
+                 * This is the same as making a patch request
+                 * 
+                 * PATCH https://graph.microsoft.com/v1.0/me/events/{id}
+                 * 
+                 * request body 
+                 * {
+                 *      attendees: [{
+                 *              emailAddress: {
+                 *                  "address": "email@address.com"
+                 *              },
+                 *              type: "resource"
+                 *          }
+                 *      ]
+                 * }
+                 * */
+                 await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Request()
+                    .UpdateAsync(patchEvent);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
         }
     }
 }
