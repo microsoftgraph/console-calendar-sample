@@ -175,64 +175,11 @@ namespace Calendar
             }
         }
 
-        public async Task<Event> SetAlldayAsync(string eventId)
-        {
-            Event updatedEvent = null;
-
-            Event patchObj = new Event();
-
-            DateTimeTimeZone start = new DateTimeTimeZone
-            {
-                TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 6).ToString()
-            };
-
-            DateTimeTimeZone end = new DateTimeTimeZone
-            {
-                TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 8).ToString()
-            };
-
-            patchObj.IsAllDay = true;
-            patchObj.Start = start;
-            patchObj.End = end;
-
-            try
-            {
-                updatedEvent = await graphClient
-                    .Me
-                    .Events[eventId]
-                    .Request()
-                    .UpdateAsync(patchObj);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            return updatedEvent;
-        }
-
-        public async Task AcceptAsync(string eventId)
-        {
-            try
-            {
-                await graphClient
-                      .Me
-                      .Events[eventId]
-                      .Accept()
-                      .Request()
-                      .PostAsync();
-                    
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
+        /// <summary>
+        /// Declines an invite to an event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         public async Task DeclineAsync(string eventId)
         {
             try
@@ -243,10 +190,12 @@ namespace Calendar
                     .Decline()
                     .Request()
                     .PostAsync();
+                Console.WriteLine("Event declined");
+
             } 
-            catch (Exception)
+            catch (Exception error)
             {
-                throw;
+                Console.WriteLine(error.Message);
             }
         }
     }

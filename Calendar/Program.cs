@@ -58,9 +58,11 @@ namespace Calendar
 
                     await cal.SetRecurrentAsync(eventSubject);
                     break;
-                case "set-allday":
-                    var allDayLong = await cal.SetAlldayAsync(eventId);
-                    Console.WriteLine(allDayLong.IsAllDay);
+                case "decline":
+                    Console.WriteLine("Enter the event's id");
+                    var eventToDecline = Console.ReadLine();
+
+                    await cal.DeclineAsync(eventToDecline);
                     break;
                 default:
                     Console.WriteLine("Invalid command");
