@@ -20,6 +20,7 @@ namespace Calendar
             Console.WriteLine("Available commands:\n" +
                 "\t 1. schedule \n " +
                 "\t 2. set-recurrent \n " +
+                "\t 3. book-room\n " + 
                 "\t exit");
             var command = "";
 
@@ -42,11 +43,20 @@ namespace Calendar
 
                     await cal.ScheduleMeetingAsync(subject);
                     break;
-                case "set-recurrent":
+                case "book-room":
                     Console.WriteLine("Enter the event id");
                     var eventId = Console.ReadLine();
 
-                    await cal.SetRecurrentAsync(eventId);
+                    Console.WriteLine("Enter the resource email");
+                    var resourceEmail = Console.ReadLine();
+
+                    await cal.BookRoomAsync(eventId, resourceEmail);
+                    break;
+                case "set-recurrent":
+                    Console.WriteLine("Enter the event subject");
+                    var eventSubject = Console.ReadLine();
+
+                    await cal.SetRecurrentAsync(eventSubject);
                     break;
                 default:
                     Console.WriteLine("Invalid command");
