@@ -19,7 +19,8 @@ namespace Calendar
 
             Console.WriteLine("Available commands:\n" +
                 "\t 1. schedule \n " +
-                "\t 2. book-room\n " + 
+                "\t 2. set-recurrent \n " +
+                "\t 3. book-room\n " + 
                 "\t exit");
             var command = "";
 
@@ -51,6 +52,12 @@ namespace Calendar
 
                     await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
+                case "set-recurrent":
+                    Console.WriteLine("Enter the event subject");
+                    var eventSubject = Console.ReadLine();
+
+                    await cal.SetRecurrentAsync(eventSubject);
+                    break;
                 default:
                     Console.WriteLine("Invalid command");
                     break;
@@ -70,7 +77,6 @@ namespace Calendar
 
                 // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();
-
                 return currentUser;
             }
 

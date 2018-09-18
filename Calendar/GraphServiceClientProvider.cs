@@ -39,8 +39,8 @@ namespace Helpers
                                 }
                             ));
                     return graphClient;
-                } 
-                catch(Exception error)
+                }
+                catch (Exception error)
                 {
                     Debug.WriteLine($"Could not create a graph client {error.Message}");
                 }
@@ -62,7 +62,7 @@ namespace Helpers
                 authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
                 return authResult.AccessToken;
             }
-            catch(MsalUiRequiredException error)
+            catch (MsalUiRequiredException error)
             {
                 // This means the AcquireTokenSilentAsync threw an exception. 
                 // This prompts the user to log in with their account so that we can get the token.
