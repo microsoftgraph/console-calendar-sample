@@ -482,8 +482,8 @@ In this exercise you are going to set a recurring event.
 		break;
 ```
 
-## Exercise 8: Decline an invite to an event
-In this exercise you are going to decline an invite to an event.
+## Exercise 8: Accept an invite to an event
+In this exercise you are going to accept an invite to an event.
 
 1. Add the code below to **CalendarController.cs**
 ```csharp
