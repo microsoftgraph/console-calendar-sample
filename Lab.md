@@ -404,12 +404,10 @@ In this exercise you are going to set a recurring event.
         /// <summary>
         /// Sets recurrent meetings
         /// </summary>
-        /// <param name="eventId"></param>
+        /// <param name="subject"></param>
         /// <returns></returns>
-        public async Task SetRecurrentAsync(string eventId)
+        public async Task SetRecurrentAsync(string subject)
         {
-            Event eventObj = new Event();
-
             // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
             {
@@ -448,15 +446,19 @@ In this exercise you are going to set a recurring event.
                 Range = range
             };
 
-            eventObj.Recurrence = recurrence;
+            Event eventObj = new Event
+            {
+                Recurrence = recurrence,
+                Subject = subject
+            };
 
             try
             {            
                 await graphClient
                     .Me
-                    .Events[eventId]
+                    .Events
                     .Request()
-                    .UpdateAsync(eventObj);
+                    .AddAsync(eventObj);
             }
             catch (Exception error)
             {
