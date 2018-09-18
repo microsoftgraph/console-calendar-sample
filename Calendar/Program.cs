@@ -21,6 +21,7 @@ namespace Calendar
                 "\t 1. schedule \n " +
                 "\t 2. set-recurrent \n " +
                 "\t 3. book-room\n " + 
+                "\t 4. decline\n " +
                 "\t exit");
             var command = "";
 
