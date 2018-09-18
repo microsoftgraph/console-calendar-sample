@@ -1,10 +1,6 @@
 ﻿using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
-=======
-using System.Linq;
->>>>>>> master
 using System.Threading.Tasks;
 
 namespace Calendar
