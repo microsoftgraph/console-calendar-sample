@@ -175,45 +175,11 @@ namespace Calendar
             }
         }
 
-        public async Task<Event> SetAlldayAsync(string eventId)
-        {
-            Event updatedEvent = null;
-
-            Event patchObj = new Event();
-
-            DateTimeTimeZone start = new DateTimeTimeZone
-            {
-                TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 6).ToString()
-            };
-
-            DateTimeTimeZone end = new DateTimeTimeZone
-            {
-                TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 8).ToString()
-            };
-
-            patchObj.IsAllDay = true;
-            patchObj.Start = start;
-            patchObj.End = end;
-
-            try
-            {
-                updatedEvent = await graphClient
-                    .Me
-                    .Events[eventId]
-                    .Request()
-                    .UpdateAsync(patchObj);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            return updatedEvent;
-        }
-
+        /// <summary>
+        /// Accepts an event invite
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         public async Task AcceptAsync(string eventId)
         {
             try
@@ -224,12 +190,13 @@ namespace Calendar
                       .Accept()
                       .Request()
                       .PostAsync();
+                Console.WriteLine("Accepted the event invite");
                     
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                Console.WriteLine(error.Message);
             }
         }
     }
