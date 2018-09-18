@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.Graph;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Graph;
 
 namespace Calendar
 {
@@ -22,116 +20,159 @@ namespace Calendar
         /// <param name="subject">Subject of the meeting</param>
         /// <param name="address">Physical address of the meeting</param>
         /// <returns></returns>
-        public async Task<Event> ScheduleMeetingAsync(string subject)
+        public async Task ScheduleMeetingAsync(string subject)
         {
-            Event scheduledEvent = new Event();
+            Event newEvent = new Event();
+            newEvent.Subject = subject;
 
             try
             {
-                Event newEvent = new Event
-                {
-                    Subject = subject
-                };
-
-                scheduledEvent = await graphClient
+                /**
+                 * This is the same as a post request 
+                 * 
+                 * POST: https://graph.microsoft.com/v1.0/me/events
+                 * Request Body
+                 * {
+                 *      "subject": <event-subject>
+                 * }
+                 * 
+                 * Learn more about the properties of an Event object in the link below
+                 * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/event
+                 * */
+                Event calendarEvent = await graphClient
                     .Me
                     .Events
                     .Request()
                     .AddAsync(newEvent);
 
-
-                Console.WriteLine($"Added {scheduledEvent.Subject}");
+                Console.WriteLine($"Added {calendarEvent.Subject}");
             }
             catch (ServiceException error)
             {
                 Console.WriteLine(error.Message);
             }
 
-            return scheduledEvent;
         }
 
-        public async Task<Event> BookRoomAsync(string eventId, string resourceMail)
+        /// <summary>
+        /// Books a room for the event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="resourceMail"></param>
+        /// <returns></returns>
+        public async Task BookRoomAsync(string eventId, string resourceMail)
         {
-            Event updatedEvent = null;
+            /**
+             * A room is an an attendee of type resource
+             * 
+             * Refer to the link below to learn more about the properties of the Attendee class
+             * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/attendee
+             **/
             Attendee room = new Attendee();
-            EmailAddress email = new EmailAddress
-            {
-                Address = resourceMail
-            };
+            EmailAddress email = new EmailAddress();
+            email.Address = resourceMail;
             room.Type = AttendeeType.Resource;
             room.EmailAddress = email;
 
+            List<Attendee> attendees = new List<Attendee>();
+            Event patchEvent = new Event();
+
+            attendees.Add(room);
+            patchEvent.Attendees = attendees;
+
             try
             {
-                List<Attendee> attendees = new List<Attendee>();
-                Event patchEvent = new Event();
-
-                attendees.Add(room);
-                patchEvent.Attendees = attendees;
-
-                updatedEvent = await graphClient
-                    .Me
-                    .Events[eventId]
-                    .Request()
-                    .UpdateAsync(patchEvent);
-
-                Console.WriteLine(updatedEvent.Attendees.Count());
+                /**
+                 * This is the same as making a patch request
+                 * 
+                 * PATCH https://graph.microsoft.com/v1.0/me/events/{id}
+                 * 
+                 * request body 
+                 * {
+                 *      attendees: [{
+                 *              emailAddress: {
+                 *                  "address": "email@address.com"
+                 *              },
+                 *              type: "resource"
+                 *          }
+                 *      ]
+                 * }
+                 * */
+                await graphClient
+                   .Me
+                   .Events[eventId]
+                   .Request()
+                   .UpdateAsync(patchEvent);
             }
             catch (Exception error)
             {
                 Console.WriteLine(error.Message);
             }
-            return updatedEvent;
         }
 
-        public async Task<Event> SetRecurrentAsync(string eventId)
+        /// <summary>
+        /// Sets recurrent meetings
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <returns></returns>
+        public async Task SetRecurrentAsync(string subject)
         {
-            Event updatedEvent = null;
-
-            Event eventObj = new Event();
-
+            // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
             {
-                Type = RecurrencePatternType.Daily,
+                Type = RecurrencePatternType.Weekly,
                 Interval = 1
             };
 
+            /**
+             * Sets the days of the week the event occurs.
+             * 
+             * For this sample it occurs every Monday
+             ***/
             List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
             daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
             pattern.DaysOfWeek = daysOfWeek;
-
+           
+            /**
+             * Sets the duration of time the event will keep recurring.
+             * 
+             * In this case the event runs from Nov 6th to Nov 26th 2018.
+             **/
             RecurrenceRange range = new RecurrenceRange
             {
                 Type = RecurrenceRangeType.EndDate,
                 StartDate = new Date(2018, 11, 6),
-                EndDate = new Date(2018, 11, 8)
+                EndDate = new Date(2018, 11, 26)
             };
 
+            /**
+             * This brings together the recurrence pattern and the range to define the
+             * PatternedRecurrence property.
+             **/
             PatternedRecurrence recurrence = new PatternedRecurrence
             {
                 Pattern = pattern,
                 Range = range
             };
 
-            eventObj.Recurrence = recurrence;
+            Event eventObj = new Event
+            {
+                Recurrence = recurrence,
+                Subject = subject
+            };
 
             try
-            {
-                
-                updatedEvent = await graphClient
+            {            
+                await graphClient
                     .Me
-                    .Events[eventId]
+                    .Events
                     .Request()
-                    .UpdateAsync(eventObj);
-
-                Console.WriteLine($">>> {updatedEvent}");
+                    .AddAsync(eventObj);
             }
             catch (Exception error)
             {
-                throw error;
+                Console.WriteLine(error.Message);
             }
-
-            return updatedEvent;
         }
 
         public async Task<Event> SetAlldayAsync(string eventId)
