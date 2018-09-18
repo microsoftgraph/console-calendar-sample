@@ -474,10 +474,10 @@ In this exercise you are going to set a recurring event.
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-	case "set-recurrent":
-		Console.WriteLine("Enter the event id");
-		var eventId = Console.ReadLine();
+    case "set-recurrent":
+        Console.WriteLine("Enter the event subject");
+        var eventSubject = Console.ReadLine();
 
-		await cal.SetRecurrentAsync(eventId);
-		break;
+        await cal.SetRecurrentAsync(eventSubject);
+        break;
 ```

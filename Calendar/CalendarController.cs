@@ -175,43 +175,41 @@ namespace Calendar
             }
         }
 
-        public async Task<Event> SetAlldayAsync(string eventId)
+        public async Task SetAlldayAsync(string eventSubject)
         {
-            Event updatedEvent = null;
-
-            Event patchObj = new Event();
-
             DateTimeTimeZone start = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 6).ToString()
+                DateTime = new Date(2018, 12, 6).ToString()
             };
-
             DateTimeTimeZone end = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 9, 8).ToString()
+                DateTime = new Date(2018, 12, 8).ToString()
             };
 
-            patchObj.IsAllDay = true;
-            patchObj.Start = start;
-            patchObj.End = end;
+            Event newEvent = new Event
+            {
+                Subject = eventSubject,
+                IsAllDay = true,
+                Start = start,
+                End = end,
+            };
 
             try
             {
-                updatedEvent = await graphClient
+                var allDayEvent = await graphClient
                     .Me
-                    .Events[eventId]
+                    .Events
                     .Request()
-                    .UpdateAsync(patchObj);
+                    .AddAsync(newEvent);
+
+                Console.WriteLine($"Created {newEvent.Subject}");
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                Console.WriteLine(error.Message);
             }
-
-            return updatedEvent;
         }
     }
 }
