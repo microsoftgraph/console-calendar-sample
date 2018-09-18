@@ -19,6 +19,7 @@ namespace Calendar
 
             Console.WriteLine("Available commands:\n" +
                 "\t 1. schedule \n " +
+                "\t 2. book-room\n " + 
                 "\t exit");
             var command = "";
 
@@ -40,6 +41,15 @@ namespace Calendar
                     var subject = Console.ReadLine();
 
                     await cal.ScheduleMeetingAsync(subject);
+                    break;
+                case "book-room":
+                    Console.WriteLine("Enter the event id");
+                    var eventId = Console.ReadLine();
+
+                    Console.WriteLine("Enter the resource email");
+                    var resourceEmail = Console.ReadLine();
+
+                    await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
                 default:
                     Console.WriteLine("Invalid command");
