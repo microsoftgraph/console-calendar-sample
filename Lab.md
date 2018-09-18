@@ -469,7 +469,7 @@ In this exercise you are going to set a recurring event.
 
 2. Add the **set-recurrent** command to the list of available commands in the **main** function
 ```csharp
- "\t 2. set-recurrent \n " + 
+ "\t 3. set-recurrent \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
