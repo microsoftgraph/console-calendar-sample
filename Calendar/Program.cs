@@ -61,8 +61,8 @@ namespace Calendar
                     break;
                 case "set-allday":
                     Console.WriteLine("Enter the event's subject");
-
                     var allDaySubject = Console.ReadLine();
+
                     await cal.SetAlldayAsync(allDaySubject);
                     break;
                 default:

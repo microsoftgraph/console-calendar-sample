@@ -175,6 +175,11 @@ namespace Calendar
             }
         }
 
+        /// <summary>
+        /// Sets all day events
+        /// </summary>
+        /// <param name="eventSubject"></param>
+        /// <returns></returns>
         public async Task SetAlldayAsync(string eventSubject)
         {
             DateTimeTimeZone start = new DateTimeTimeZone
