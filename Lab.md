@@ -11,6 +11,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
 - [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-event)
 - [Exercise 7: Set a recurrent event](#-exercise-7-set-a-recurrent-event)
+- [Exercise 8: Set an all day event](#-exercise-8-set-an-all-day-event)
 
 ## Prerequisites
 
@@ -474,10 +475,73 @@ In this exercise you are going to set a recurring event.
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-	case "set-recurrent":
-		Console.WriteLine("Enter the event id");
-		var eventId = Console.ReadLine();
+    case "set-recurrent":
+        Console.WriteLine("Enter the event subject");
+        var eventSubject = Console.ReadLine();
 
-		await cal.SetRecurrentAsync(eventId);
+        await cal.SetRecurrentAsync(eventSubject);
+        break;
+```
+
+## Exercise 8: Set an all day event
+In this exercise you're going to create an all day event.
+
+1. Add the code below to **CalendarController.cs**
+```csharp
+    /// <summary>
+    /// Sets all day events
+    /// </summary>
+    /// <param name="eventSubject"></param>
+    /// <returns></returns>
+    public async Task SetAlldayAsync(string eventSubject)
+    {
+        DateTimeTimeZone start = new DateTimeTimeZone
+        {
+            TimeZone = "Pacific Standard Time",
+            DateTime = new Date(2018, 12, 6).ToString()
+        };
+        DateTimeTimeZone end = new DateTimeTimeZone
+        {
+            TimeZone = "Pacific Standard Time",
+            DateTime = new Date(2018, 12, 8).ToString()
+        };
+
+        Event newEvent = new Event
+        {
+            Subject = eventSubject,
+            IsAllDay = true,
+            Start = start,
+            End = end,
+        };
+
+        try
+        {
+            var allDayEvent = await graphClient
+                .Me
+                .Events
+                .Request()
+                .AddAsync(newEvent);
+
+            Console.WriteLine($"Created {newEvent.Subject}");
+        }
+        catch (Exception error)
+        {
+            Console.WriteLine(error.Message);
+        }
+    }
+```
+
+2. Add the **set-allday** command to the list of available commands in the **main** function
+```csharp
+ "\t 4. set-allday \n " + 
+```
+
+3. Add the following **case** statement in the **runAsync** method
+```csharp
+    case "set-allday":
+		Console.WriteLine("Enter the event's subject");
+		var allDaySubject = Console.ReadLine();
+
+		await cal.SetAlldayAsync(allDaySubject);
 		break;
 ```
