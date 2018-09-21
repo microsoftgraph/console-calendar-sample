@@ -132,7 +132,7 @@ namespace Calendar
             List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
             daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
             pattern.DaysOfWeek = daysOfWeek;
-           
+
             /**
              * Sets the duration of time the event will keep recurring.
              * 
@@ -162,12 +162,54 @@ namespace Calendar
             };
 
             try
-            {            
+            {
                 await graphClient
                     .Me
                     .Events
                     .Request()
                     .AddAsync(eventObj);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
+
+        /// <summary>
+        /// Sets all day events
+        /// </summary>
+        /// <param name="eventSubject"></param>
+        /// <returns></returns>
+        public async Task SetAllDayAsync(string eventSubject)
+        {
+            DateTimeTimeZone start = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = new Date(2018, 12, 6).ToString()
+            };
+            DateTimeTimeZone end = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = new Date(2018, 12, 8).ToString()
+            };
+
+            Event newEvent = new Event
+            {
+                Subject = eventSubject,
+                IsAllDay = true,
+                Start = start,
+                End = end,
+            };
+
+            try
+            {
+                var allDayEvent = await graphClient
+                    .Me
+                    .Events
+                    .Request()
+                    .AddAsync(newEvent);
+
+                Console.WriteLine($"Created {newEvent.Subject}");
             }
             catch (Exception error)
             {
@@ -191,11 +233,10 @@ namespace Calendar
                       .Request()
                       .PostAsync();
                 Console.WriteLine("Accepted the event invite");
-                    
+
             }
             catch (Exception error)
             {
-
                 Console.WriteLine(error.Message);
             }
         }

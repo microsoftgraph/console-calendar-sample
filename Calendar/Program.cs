@@ -21,7 +21,8 @@ namespace Calendar
                 "\t 1. schedule \n " +
                 "\t 2. set-recurrent \n " +
                 "\t 3. book-room \n " + 
-                "\t 4. accept \n " +
+                "\t 4. set-allday \n " +
+                "\t 5. accept \n " +
                 "\t exit");
             var command = "";
 
@@ -58,6 +59,12 @@ namespace Calendar
                     var eventSubject = Console.ReadLine();
 
                     await cal.SetRecurrentAsync(eventSubject);
+                    break;
+                case "set-allday":
+                    Console.WriteLine("Enter the event's subject");
+                    var allDaySubject = Console.ReadLine();
+
+                    await cal.SetAllDayAsync(allDaySubject);
                     break;
                 case "accept":
                     Console.WriteLine("Enter the event's id");
