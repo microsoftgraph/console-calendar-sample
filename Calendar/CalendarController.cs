@@ -111,11 +111,11 @@ namespace Calendar
         }
 
         /// <summary>
-        /// Sets recurrent meetings
+        /// Sets recurrent events
         /// </summary>
         /// <param name="subject"></param>
         /// <returns></returns>
-        public async Task SetRecurrentAsync(string subject)
+        public async Task SetRecurrentAsync(string subject, string startTime, string endTime)
         {
             // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
@@ -155,19 +155,36 @@ namespace Calendar
                 Range = range
             };
 
+            DateTime dateTime = DateTime.Today;
+            // set the start and end time for the event
+            DateTimeTimeZone start = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{startTime}:00:00"
+            };
+
+            DateTimeTimeZone end = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{endTime}:00:00"
+            };
+
             Event eventObj = new Event
             {
                 Recurrence = recurrence,
-                Subject = subject
+                Subject = subject,
+                Start = start,
+                End = end,
             };
 
             try
             {
-                await graphClient
+                var recurrentEvent = await graphClient
                     .Me
                     .Events
                     .Request()
                     .AddAsync(eventObj);
+                Console.WriteLine($"Created {recurrentEvent.Subject}");
             }
             catch (Exception error)
             {

@@ -403,12 +403,12 @@ In this exercise you are going to set a recurring event.
 
 1. Add the code below to **CalendarController.cs**
 ```csharp
-        /// <summary>
-        /// Sets recurrent meetings
+		/// <summary>
+        /// Sets recurrent events
         /// </summary>
         /// <param name="subject"></param>
         /// <returns></returns>
-        public async Task SetRecurrentAsync(string subject)
+        public async Task SetRecurrentAsync(string subject, string startTime, string endTime)
         {
             // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
@@ -425,7 +425,7 @@ In this exercise you are going to set a recurring event.
             List<Microsoft.Graph.DayOfWeek> daysOfWeek = new List<Microsoft.Graph.DayOfWeek>();
             daysOfWeek.Add(Microsoft.Graph.DayOfWeek.Monday);
             pattern.DaysOfWeek = daysOfWeek;
-           
+
             /**
              * Sets the duration of time the event will keep recurring.
              * 
@@ -448,19 +448,36 @@ In this exercise you are going to set a recurring event.
                 Range = range
             };
 
+            DateTime dateTime = DateTime.Today;
+            // set the start and end time for the event
+            DateTimeTimeZone start = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{startTime}:00:00"
+            };
+
+            DateTimeTimeZone end = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{endTime}:00:00"
+            };
+
             Event eventObj = new Event
             {
                 Recurrence = recurrence,
-                Subject = subject
+                Subject = subject,
+                Start = start,
+                End = end,
             };
 
             try
-            {            
-                await graphClient
+            {
+                var recurrentEvent = await graphClient
                     .Me
                     .Events
                     .Request()
                     .AddAsync(eventObj);
+                Console.WriteLine($"Created {recurrentEvent.Subject}");
             }
             catch (Exception error)
             {
@@ -480,7 +497,13 @@ In this exercise you are going to set a recurring event.
         Console.WriteLine("Enter the event subject");
         var eventSubject = Console.ReadLine();
 
-        await cal.SetRecurrentAsync(eventSubject);
+        Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
+        var startTime = Console.ReadLine();
+
+        Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
+        var endTime = Console.ReadLine();
+
+        await cal.SetRecurrentAsync(eventSubject, startTime, endTime);
         break;
 ```
 
