@@ -63,7 +63,7 @@ namespace Calendar
                     Console.WriteLine("Enter the event's subject");
                     var allDaySubject = Console.ReadLine();
 
-                    await cal.SetAlldayAsync(allDaySubject);
+                    await cal.SetAllDayAsync(allDaySubject);
                     break;
                 default:
                     Console.WriteLine("Invalid command");

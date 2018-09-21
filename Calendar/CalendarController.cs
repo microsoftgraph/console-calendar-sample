@@ -180,7 +180,7 @@ namespace Calendar
         /// </summary>
         /// <param name="eventSubject"></param>
         /// <returns></returns>
-        public async Task SetAlldayAsync(string eventSubject)
+        public async Task SetAllDayAsync(string eventSubject)
         {
             DateTimeTimeZone start = new DateTimeTimeZone
             {
