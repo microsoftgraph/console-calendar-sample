@@ -545,3 +545,49 @@ In this exercise you're going to create an all day event.
 		await cal.SetAlldayAsync(allDaySubject);
 		break;
 ```
+
+## Exercise 8: Accept an invite to an event
+In this exercise you are going to accept an invite to an event.
+
+1. Add the code below to **CalendarController.cs**
+```csharp
+        /// <summary>
+        /// Accepts an event invite
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public async Task AcceptAsync(string eventId)
+        {
+            try
+            {
+                await graphClient
+                      .Me
+                      .Events[eventId]
+                      .Accept()
+                      .Request()
+                      .PostAsync();
+                Console.WriteLine("Accepted the event invite");
+                    
+            }
+            catch (Exception error)
+            {
+
+                Console.WriteLine(error.Message);
+            }
+        }
+```
+
+2. Add the **accept** command to the list of available commands in the **main** function
+```csharp
+ "\t 4. accept \n " + 
+```
+
+3. Add the following **case** statement in the **runAsync** method
+```csharp
+	case "accept":
+		Console.WriteLine("Enter the event's id");
+		var eventToAccept = Console.ReadLine();
+
+		await cal.AcceptAsync(eventToAccept);
+		break;
+```
