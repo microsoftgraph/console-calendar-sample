@@ -15,9 +15,9 @@ namespace Calendar
         }
 
         /// <summary>
-        /// Schedules a meeting.
+        /// Schedules an event.
         /// 
-        /// For purposes of simplicity we only allow the user to enter the starTime
+        /// For purposes of simplicity we only allow the user to enter the startTime
         /// and endTime as hours.
         /// </summary>
         /// <param name="subject">Subject of the meeting</param>
@@ -25,11 +25,11 @@ namespace Calendar
         /// <param name="endTime">Duration of the meeting</param>
         /// <param name="attendeeEmail">Email of person to invite</param>
         /// <returns></returns>
-        public async Task ScheduleMeetingAsync(string subject, string startTime, string endTime, string attendeeEmail)
+        public async Task ScheduleEventAsync(string subject, string startTime, string endTime, string attendeeEmail)
         {
             DateTime dateTime = DateTime.Today;
 
-            // set the start and end time for the meeting
+            // set the start and end time for the event
             DateTimeTimeZone start = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",

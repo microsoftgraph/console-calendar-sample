@@ -235,9 +235,9 @@ class CalendarController
         }
 
         /// <summary>
-        /// Schedules a meeting.
+        /// Schedules an event.
         /// 
-        /// For purposes of simplicity we only allow the user to enter the starTime
+        /// For purposes of simplicity we only allow the user to enter the startTime
         /// and endTime as hours.
         /// </summary>
         /// <param name="subject">Subject of the meeting</param>
@@ -245,11 +245,11 @@ class CalendarController
         /// <param name="endTime">Duration of the meeting</param>
         /// <param name="attendeeEmail">Email of person to invite</param>
         /// <returns></returns>
-        public async Task ScheduleMeetingAsync(string subject, string startTime, string endTime, string attendeeEmail)
+        public async Task ScheduleEventAsync(string subject, string startTime, string endTime, string attendeeEmail)
         {
             DateTime dateTime = DateTime.Today;
 
-            // set the start and end time for the meeting
+            // set the start and end time for the event
             DateTimeTimeZone start = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
@@ -358,16 +358,16 @@ This allows the user interact with your application through the command line int
             switch (command)
             {
                 case "schedule":
-                    Console.WriteLine("Enter the subject of your meeting");
+                    Console.WriteLine("Enter the subject of your event");
                     var subject = Console.ReadLine();
 
-                    Console.WriteLine("Invite an attendee to this meeting, enter their email");
+                    Console.WriteLine("Invite an attendee to this event, enter their email");
                     var attendee = Console.ReadLine();
 
-                    Console.WriteLine("Enter the start time of your meeting, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
                     var startTime = Console.ReadLine();
 
-                    Console.WriteLine("Enter the end time of your meeting, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
                     var endTime = Console.ReadLine();
 
                     await cal.ScheduleMeetingAsync(subject, startTime, endTime, attendee);
