@@ -23,6 +23,7 @@ namespace Calendar
                 "\t 3. book-room \n " + 
                 "\t 4. set-allday \n " +
                 "\t 5. accept \n " +
+                "\t 6. decline \n" +
                 "\t exit");
             var command = "";
 
@@ -71,6 +72,12 @@ namespace Calendar
                     var eventToAccept = Console.ReadLine();
 
                     await cal.AcceptAsync(eventToAccept);
+                    break;
+                case "decline":
+                    Console.WriteLine("Enter the event's id");
+                    var eventToDecline = Console.ReadLine();
+
+                    await cal.DeclineAsync(eventToDecline);
                     break;
                 default:
                     Console.WriteLine("Invalid command");

@@ -12,6 +12,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-event)
 - [Exercise 7: Set a recurrent event](#-exercise-7-set-a-recurrent-event)
 - [Exercise 8: Set an all day event](#-exercise-8-set-an-all-day-event)
+- [Exercise 9: Decline an invite to an event](#-decline-an-invite-to-an-event)
 
 ## Prerequisites
 
@@ -589,5 +590,50 @@ In this exercise you are going to accept an invite to an event.
 		var eventToAccept = Console.ReadLine();
 
 		await cal.AcceptAsync(eventToAccept);
+		break;
+```
+
+## Exercise 9: Decline an invite to an event
+In this exercise you are going to decline an invite to an event.
+
+1. Add the code below to **CalendarController.cs**
+```csharp
+        /// <summary>
+        /// Declines an invite to an event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public async Task DeclineAsync(string eventId)
+        {
+            try
+            {
+                await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Decline()
+                    .Request()
+                    .PostAsync();
+                Console.WriteLine("Event declined");
+
+            } 
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
+```
+
+2. Add the **decline** command to the list of available commands in the **main** function
+```csharp
+ "\t 4. decline \n " + 
+```
+
+3. Add the following **case** statement in the **runAsync** method
+```csharp
+	case "decline":
+		Console.WriteLine("Enter the event's id");
+		var eventToDecline = Console.ReadLine();
+
+		await cal.DeclineAsync(eventToDecline);
 		break;
 ```

@@ -240,5 +240,29 @@ namespace Calendar
                 Console.WriteLine(error.Message);
             }
         }
+
+        /// <summary>
+        /// Declines an invite to an event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public async Task DeclineAsync(string eventId)
+        {
+            try
+            {
+                await graphClient
+                    .Me
+                    .Events[eventId]
+                    .Decline()
+                    .Request()
+                    .PostAsync();
+                Console.WriteLine("Event declined");
+
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
     }
 }

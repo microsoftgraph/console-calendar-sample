@@ -15,7 +15,7 @@ In this lab you will create a .NET Core CLI application, configured with Azure A
 
 |        Roles         |                        Author(s)                        |
 | -------------------- | ------------------------------------------------------- |
-| Lab Manuals          | Japhet Obala (Microsoft) @jobala                        |
+| Lab Manuals          | Japheth Obala (Microsoft) @jobala                       |
 
 ## Version history
 
