@@ -59,7 +59,13 @@ namespace Calendar
                     Console.WriteLine("Enter the event subject");
                     var eventSubject = Console.ReadLine();
 
-                    await cal.SetRecurrentAsync(eventSubject);
+                    Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
+                    var startTime = Console.ReadLine();
+
+                    Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
+                    var endTime = Console.ReadLine();
+
+                    await cal.SetRecurrentAsync(eventSubject, startTime, endTime);
                     break;
                 case "set-allday":
                     Console.WriteLine("Enter the event's subject");
