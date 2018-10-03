@@ -15,15 +15,53 @@ namespace Calendar
         }
 
         /// <summary>
-        /// Schedules a meeting.
+        /// Schedules an event.
+        /// 
+        /// For purposes of simplicity we only allow the user to enter the startTime
+        /// and endTime as hours.
         /// </summary>
         /// <param name="subject">Subject of the meeting</param>
-        /// <param name="address">Physical address of the meeting</param>
+        /// <param name="startTime">The time when the meeting starts</param>
+        /// <param name="endTime">Duration of the meeting</param>
+        /// <param name="attendeeEmail">Email of person to invite</param>
         /// <returns></returns>
-        public async Task ScheduleMeetingAsync(string subject)
+        public async Task ScheduleEventAsync(string subject, string startTime, string endTime, string attendeeEmail)
         {
-            Event newEvent = new Event();
-            newEvent.Subject = subject;
+            DateTime dateTime = DateTime.Today;
+
+            // set the start and end time for the event
+            DateTimeTimeZone start = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{startTime}:00:00"
+            };
+            DateTimeTimeZone end = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{endTime}:00:00"
+            };
+
+            // Adds attendee to the event
+            EmailAddress email = new EmailAddress
+            {
+                Address = attendeeEmail
+            };
+
+            Attendee attendee = new Attendee
+            {
+                EmailAddress = email,
+                Type = AttendeeType.Required,
+            };
+            List<Attendee> attendees = new List<Attendee>();
+            attendees.Add(attendee);
+
+            Event newEvent = new Event
+            {
+                Subject = subject,
+                Attendees = attendees,
+                Start = start,
+                End = end
+            };
 
             try
             {
@@ -34,6 +72,21 @@ namespace Calendar
                  * Request Body
                  * {
                  *      "subject": <event-subject>
+                 *      "start": {
+                            "dateTime": "<date-string>",
+                            "timeZone": "Pacific Standard Time"
+                          },
+                         "end": {
+                             "dateTime": "<date-string>",
+                             "timeZone": "Pacific Standard Time"
+                          },
+                          "attendees": [{
+                            emailAddress: {
+                                address: attendeeEmail 
+                            }
+                            "type": "required"
+                          }]
+                            
                  * }
                  * 
                  * Learn more about the properties of an Event object in the link below

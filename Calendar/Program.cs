@@ -41,10 +41,19 @@ namespace Calendar
             switch (command)
             {
                 case "schedule":
-                    Console.WriteLine("Enter the subject of your meeting");
+                    Console.WriteLine("Enter the subject of your event");
                     var subject = Console.ReadLine();
 
-                    await cal.ScheduleMeetingAsync(subject);
+                    Console.WriteLine("Invite an attendee to this event, enter their email");
+                    var attendee = Console.ReadLine();
+
+                    Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
+                    var startTime = Console.ReadLine();
+
+                    Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
+                    var endTime = Console.ReadLine();
+
+                    await cal.ScheduleEventAsync(subject, startTime, endTime, attendee);
                     break;
                 case "book-room":
                     Console.WriteLine("Enter the event id");
