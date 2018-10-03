@@ -661,6 +661,16 @@ In this exercise you are going to accept an invite to an event.
                 Console.WriteLine(error.Message);
             }
         }
+
+		
+        public async Task<IUserEventsCollectionPage> GetEvents()
+        {
+            return await graphClient
+                .Me
+                .Events
+                .Request()
+                .GetAsync();
+        }
 ```
 
 2. Add the **accept-event** command to the list of available commands in the **main** function
@@ -671,10 +681,20 @@ In this exercise you are going to accept an invite to an event.
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
 	case "accept-event":
-		Console.WriteLine("Enter the event's id");
-		var eventToAccept = Console.ReadLine();
+		var eventsToAccept = await cal.GetEvents();
 
-		await cal.AcceptAsync(eventToAccept);
+		for (int i = 0; i < 5; i++)
+		{
+			Event eventToAccept = eventsToAccept[i];
+
+			Console.WriteLine($"Index: {i} Organiser: {eventToAccept.Organizer.EmailAddress.Name} Subject: {eventToAccept.Subject}");
+		}
+
+		Console.WriteLine("\nEnter the index of the invite you wish to accept");
+		var indexToAccept = int.Parse(Console.ReadLine());
+
+		await cal.AcceptAsync(eventsToAccept[indexToAccept].Id);
+		Console.WriteLine("Invite accepted!");
 		break;
 ```
 
@@ -716,9 +736,19 @@ In this exercise you are going to decline an invite to an event.
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
 	case "decline-event":
-		Console.WriteLine("Enter the event's id");
-		var eventToDecline = Console.ReadLine();
+		var eventsToDecline = await cal.GetEvents();
 
-		await cal.DeclineAsync(eventToDecline);
+		for (int i = 0; i < 5; i++)
+		{
+			Event eventToDecline = eventsToDecline[i];
+
+			Console.WriteLine($"Index: {i} Organiser: {eventToDecline.Organizer.EmailAddress.Name} Subject: {eventToDecline.Subject}");
+		}
+
+		Console.WriteLine("\nEnter the index of the invite you wish to accept");
+		var indexToDecline = int.Parse(Console.ReadLine());
+
+		await cal.AcceptAsync(eventsToDecline[indexToDecline].Id);
+		Console.WriteLine("Invite declined!");
 		break;
 ```

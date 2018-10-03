@@ -334,5 +334,14 @@ namespace Calendar
                 Console.WriteLine(error.Message);
             }
         }
+
+        public async Task<IUserEventsCollectionPage> GetEvents()
+        {
+            return await graphClient
+                .Me
+                .Events
+                .Request()
+                .GetAsync();
+        }
     }
 }
