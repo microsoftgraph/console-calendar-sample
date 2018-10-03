@@ -83,16 +83,36 @@ namespace Calendar
                     await cal.SetAllDayAsync(allDaySubject);
                     break;
                 case "accept-event":
-                    Console.WriteLine("Enter the event's id");
-                    var eventToAccept = Console.ReadLine();
+                    var eventsToAccept = await cal.GetEvents();
 
-                    await cal.AcceptAsync(eventToAccept);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Event eventToAccept = eventsToAccept[i];
+
+                        Console.WriteLine($"Index: {i} Organiser: {eventToAccept.Organizer.EmailAddress.Name} Subject: {eventToAccept.Subject}");
+                    }
+
+                    Console.WriteLine("\nEnter the index of the invite you wish to accept");
+                    var indexToAccept = int.Parse(Console.ReadLine());
+
+                    await cal.AcceptAsync(eventsToAccept[indexToAccept].Id);
+                    Console.WriteLine("Invite accepted!");
                     break;
                 case "decline-event":
-                    Console.WriteLine("Enter the event's id");
-                    var eventToDecline = Console.ReadLine();
+                    var eventsToDecline = await cal.GetEvents();
 
-                    await cal.DeclineAsync(eventToDecline);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Event eventToDecline = eventsToDecline[i];
+
+                        Console.WriteLine($"Index: {i} Organiser: {eventToDecline.Organizer.EmailAddress.Name} Subject: {eventToDecline.Subject}");
+                    }
+
+                    Console.WriteLine("\nEnter the index of the invite you wish to accept");
+                    var indexToDecline = int.Parse(Console.ReadLine());
+
+                    await cal.AcceptAsync(eventsToDecline[indexToDecline].Id);
+                    Console.WriteLine("Invite declined!");
                     break;
                 default:
                     Console.WriteLine("Invalid command");
