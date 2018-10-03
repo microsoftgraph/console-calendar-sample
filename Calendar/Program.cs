@@ -48,10 +48,10 @@ namespace Calendar
                     var attendee = Console.ReadLine();
 
                     Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-                    var startTime = Console.ReadLine();
+                    var startTime = Console.ReadLine().Substring(0, 2);
 
                     Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-                    var endTime = Console.ReadLine();
+                    var endTime = Console.ReadLine().Substring(0, 2);
 
                     await cal.ScheduleEventAsync(subject, startTime, endTime, attendee);
                     break;
@@ -69,10 +69,10 @@ namespace Calendar
                     var eventSubject = Console.ReadLine();
 
                     Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-                    var startRecurrent = Console.ReadLine();
+                    var startRecurrent = Console.ReadLine().Substring(0, 2);
 
                     Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-                    var endRecurrent = Console.ReadLine();
+                    var endRecurrent = Console.ReadLine().Substring(0, 2);
 
                     await cal.SetRecurrentAsync(eventSubject, startRecurrent, endRecurrent);
                     break;
