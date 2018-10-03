@@ -365,10 +365,10 @@ This allows the user interact with your application through the command line int
                     var attendee = Console.ReadLine();
 
                     Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-                    var startTime = Console.ReadLine();
+                    var startTime = Console.ReadLine().Substring(0, 2);
 
                     Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-                    var endTime = Console.ReadLine();
+                    var endTime = Console.ReadLine().Substring(0, 2);
 
                     await cal.ScheduleMeetingAsync(subject, startTime, endTime, attendee);
                     break;
@@ -560,10 +560,10 @@ In this exercise you are going to set a recurring event.
         var eventSubject = Console.ReadLine();
 
         Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-        var startTime = Console.ReadLine();
+        var startTime = Console.ReadLine().Substring(0, 2);
 
         Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-        var endTime = Console.ReadLine();
+        var endTime = Console.ReadLine().Substring(0, 2);
 
         await cal.SetRecurrentAsync(eventSubject, startTime, endTime);
         break;
