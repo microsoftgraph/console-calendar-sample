@@ -18,12 +18,12 @@ namespace Calendar
             RunAsync().GetAwaiter().GetResult();
 
             Console.WriteLine("Available commands:\n" +
-                "\t 1. schedule \n " +
-                "\t 2. set-recurrent \n " +
+                "\t 1. schedule-event \n " +
+                "\t 2. recurrent-event \n " +
                 "\t 3. book-room \n " + 
-                "\t 4. set-allday \n " +
-                "\t 5. accept \n " +
-                "\t 6. decline \n" +
+                "\t 4. allday-event \n " +
+                "\t 5. accept-event \n " +
+                "\t 6. decline-event \n" +
                 "\t exit");
             var command = "";
 
@@ -40,7 +40,7 @@ namespace Calendar
         {
             switch (command)
             {
-                case "schedule":
+                case "schedule-event":
                     Console.WriteLine("Enter the subject of your event");
                     var subject = Console.ReadLine();
 
@@ -64,31 +64,31 @@ namespace Calendar
 
                     await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
-                case "set-recurrent":
+                case "recurrent-event":
                     Console.WriteLine("Enter the event subject");
                     var eventSubject = Console.ReadLine();
 
                     Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-                    var startTime = Console.ReadLine();
+                    var startRecurrent = Console.ReadLine();
 
                     Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-                    var endTime = Console.ReadLine();
+                    var endRecurrent = Console.ReadLine();
 
-                    await cal.SetRecurrentAsync(eventSubject, startTime, endTime);
+                    await cal.SetRecurrentAsync(eventSubject, startRecurrent, endRecurrent);
                     break;
-                case "set-allday":
+                case "allday-event":
                     Console.WriteLine("Enter the event's subject");
                     var allDaySubject = Console.ReadLine();
 
                     await cal.SetAllDayAsync(allDaySubject);
                     break;
-                case "accept":
+                case "accept-event":
                     Console.WriteLine("Enter the event's id");
                     var eventToAccept = Console.ReadLine();
 
                     await cal.AcceptAsync(eventToAccept);
                     break;
-                case "decline":
+                case "decline-event":
                     Console.WriteLine("Enter the event's id");
                     var eventToDecline = Console.ReadLine();
 

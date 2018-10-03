@@ -337,7 +337,7 @@ class CalendarController
             RunAsync().GetAwaiter().GetResult();
 
             Console.WriteLine("Available commands:\n" +
-                "\t 1. schedule \n " +
+                "\t 1. schedule-event \n " +
                 "\t exit");
             var command = "";
 
@@ -357,7 +357,7 @@ This allows the user interact with your application through the command line int
         {
             switch (command)
             {
-                case "schedule":
+                case "schedule-event":
                     Console.WriteLine("Enter the subject of your event");
                     var subject = Console.ReadLine();
 
@@ -548,14 +548,14 @@ In this exercise you are going to set a recurring event.
         }
 ```
 
-2. Add the **set-recurrent** command to the list of available commands in the **main** function
+2. Add the **recurrent-event** command to the list of available commands in the **main** function
 ```csharp
- "\t 3. set-recurrent \n " + 
+ "\t 3. recurrent-event \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-    case "set-recurrent":
+    case "recurrent-event":
         Console.WriteLine("Enter the event subject");
         var eventSubject = Console.ReadLine();
 
@@ -617,14 +617,14 @@ In this exercise you're going to create an all day event.
     }
 ```
 
-2. Add the **set-allday** command to the list of available commands in the **main** function
+2. Add the **allday-event** command to the list of available commands in the **main** function
 ```csharp
  "\t 4. set-allday \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-    case "set-allday":
+    case "allday-event":
 		Console.WriteLine("Enter the event's subject");
 		var allDaySubject = Console.ReadLine();
 
@@ -663,14 +663,14 @@ In this exercise you are going to accept an invite to an event.
         }
 ```
 
-2. Add the **accept** command to the list of available commands in the **main** function
+2. Add the **accept-event** command to the list of available commands in the **main** function
 ```csharp
- "\t 4. accept \n " + 
+ "\t 4. accept-event \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-	case "accept":
+	case "accept-event":
 		Console.WriteLine("Enter the event's id");
 		var eventToAccept = Console.ReadLine();
 
@@ -708,14 +708,14 @@ In this exercise you are going to decline an invite to an event.
         }
 ```
 
-2. Add the **decline** command to the list of available commands in the **main** function
+2. Add the **decline-event** command to the list of available commands in the **main** function
 ```csharp
  "\t 4. decline \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-	case "decline":
+	case "decline-event":
 		Console.WriteLine("Enter the event's id");
 		var eventToDecline = Console.ReadLine();
 
