@@ -465,10 +465,14 @@ In this exercise you are going to set a recurring event.
 
 1. Add the code below to **CalendarController.cs**
 ```csharp
-		/// <summary>
+        /// <summary>
         /// Sets recurrent events
         /// </summary>
         /// <param name="subject"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
         /// <returns></returns>
         public async Task SetRecurrentAsync(string subject, string startDate, string endDate, string startTime, string endTime)
         {
@@ -555,14 +559,14 @@ In this exercise you are going to set a recurring event.
         }
 ```
 
-2. Add the **recurrent-event** command to the list of available commands in the **main** function
+2. Add the **schedule-recurrent-event** command to the list of available commands in the **main** function
 ```csharp
  "\t 3. recurrent-event \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-    case "recurrent-event":
+    case "schedule-recurrent-event":
         Console.WriteLine("Enter the event subject");
         var eventSubject = Console.ReadLine();
 
@@ -587,62 +591,93 @@ In this exercise you're going to create an all day event.
 
 1. Add the code below to **CalendarController.cs**
 ```csharp
-    /// <summary>
-    /// Sets all day events
-    /// </summary>
-    /// <param name="eventSubject"></param>
-    /// <returns></returns>
-    public async Task SetAlldayAsync(string eventSubject)
-    {
-        DateTimeTimeZone start = new DateTimeTimeZone
+        /// <summary>
+        /// Sets all day events
+        /// </summary>
+        /// <param name="eventSubject"></param>
+        /// <param name="attendeeEmail"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public async Task SetAllDayAsync(string eventSubject, string attendeeEmail, string date)
         {
-            TimeZone = "Pacific Standard Time",
-            DateTime = new Date(2018, 12, 6).ToString()
-        };
-        DateTimeTimeZone end = new DateTimeTimeZone
-        {
-            TimeZone = "Pacific Standard Time",
-            DateTime = new Date(2018, 12, 8).ToString()
-        };
+            // Adds attendee to the event
+            EmailAddress email = new EmailAddress
+            {
+                Address = attendeeEmail
+            };
 
-        Event newEvent = new Event
-        {
-            Subject = eventSubject,
-            IsAllDay = true,
-            Start = start,
-            End = end,
-        };
+            Attendee attendee = new Attendee
+            {
+                EmailAddress = email,
+                Type = AttendeeType.Required,
+            };
+            List<Attendee> attendees = new List<Attendee>();
+            attendees.Add(attendee);
 
-        try
-        {
-            var allDayEvent = await graphClient
-                .Me
-                .Events
-                .Request()
-                .AddAsync(newEvent);
+            int day = int.Parse(date.Substring(0, 2));
+            int month = int.Parse(date.Substring(3, 2));
+            int year = int.Parse(date.Substring(6, 4));
 
-            Console.WriteLine($"Created {newEvent.Subject}");
+            Date allDayDate = new Date(year, month, day);
+            DateTimeTimeZone start = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = allDayDate.ToString()
+            };
+
+            Date nextDay = new Date(year, month, day + 1);
+            DateTimeTimeZone end = new DateTimeTimeZone
+            {
+                TimeZone = "Pacific Standard Time",
+                DateTime = nextDay.ToString()
+            };
+
+            Event newEvent = new Event
+            {
+                Subject = eventSubject,
+                Attendees = attendees,
+                IsAllDay = true,
+                Start = start,
+                End = end
+            };
+
+            try
+            {
+                var allDayEvent = await graphClient
+                    .Me
+                    .Events
+                    .Request()
+                    .AddAsync(newEvent);
+
+                Console.WriteLine($"Created an all day event: {newEvent.Subject}." +
+                    $" Happening on {date}");
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
         }
-        catch (Exception error)
-        {
-            Console.WriteLine(error.Message);
-        }
-    }
 ```
 
-2. Add the **allday-event** command to the list of available commands in the **main** function
+2. Add the **schedule-allday-event** command to the list of available commands in the **main** function
 ```csharp
- "\t 4. set-allday \n " + 
+ "\t 4. schedule-allday-event \n " + 
 ```
 
 3. Add the following **case** statement in the **runAsync** method
 ```csharp
-    case "allday-event":
-		Console.WriteLine("Enter the event's subject");
-		var allDaySubject = Console.ReadLine();
+    case "schedule-allday-event":
+        Console.WriteLine("Enter the event's subject");
+        var allDaySubject = Console.ReadLine();
 
-		await cal.SetAlldayAsync(allDaySubject);
-		break;
+        Console.WriteLine("Invite an attendee to this event, enter their email");
+        var allDayAttendee = Console.ReadLine();
+
+        Console.WriteLine("Enter the date of your event DD/MM/YYYY");
+        var allDayDate = Console.ReadLine();
+
+        await cal.SetAllDayAsync(allDaySubject, allDayAttendee, allDayDate);
+        break;
 ```
 
 ## Exercise 8: Accept an invite to an event
