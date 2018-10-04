@@ -47,10 +47,10 @@ namespace Calendar
                     Console.WriteLine("Invite an attendee to this event, enter their email");
                     var attendee = Console.ReadLine();
 
-                    Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the start time of your event, in 24hr format 0000 - 2300");
                     var startTime = Console.ReadLine().Substring(0, 2);
 
-                    Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the end time of your event, in 24hr format 0000 - 2300");
                     var endTime = Console.ReadLine().Substring(0, 2);
 
                     await cal.ScheduleEventAsync(subject, startTime, endTime, attendee);
@@ -68,13 +68,19 @@ namespace Calendar
                     Console.WriteLine("Enter the event subject");
                     var eventSubject = Console.ReadLine();
 
-                    Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the start date of your event DD/MM/YYYY");
+                    var startDate = Console.ReadLine();
+
+                    Console.WriteLine("Enter the end date of your event DD/MM/YYYY");
+                    var endDate = Console.ReadLine();
+
+                    Console.WriteLine("Enter the start time of your event, in 24hr format 0000 - 2300");
                     var startRecurrent = Console.ReadLine().Substring(0, 2);
 
-                    Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
+                    Console.WriteLine("Enter the end time of your event, in 24hr format 0000 - 2300");
                     var endRecurrent = Console.ReadLine().Substring(0, 2);
 
-                    await cal.SetRecurrentAsync(eventSubject, startRecurrent, endRecurrent);
+                    await cal.SetRecurrentAsync(eventSubject, startDate, endDate, startRecurrent, endRecurrent);
                     break;
                 case "schedule-allday-event":
                     Console.WriteLine("Enter the event's subject");
@@ -85,12 +91,7 @@ namespace Calendar
                 case "accept-event":
                     var eventsToAccept = await cal.GetEvents();
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        Event eventToAccept = eventsToAccept[i];
-
-                        Console.WriteLine($"Index: {i} Organiser: {eventToAccept.Organizer.EmailAddress.Name} Subject: {eventToAccept.Subject}");
-                    }
+                    listEvents(eventsToAccept);
 
                     Console.WriteLine("\nEnter the index of the invite you wish to accept");
                     var indexToAccept = int.Parse(Console.ReadLine());
@@ -101,12 +102,7 @@ namespace Calendar
                 case "decline-event":
                     var eventsToDecline = await cal.GetEvents();
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        Event eventToDecline = eventsToDecline[i];
-
-                        Console.WriteLine($"Index: {i} Organiser: {eventToDecline.Organizer.EmailAddress.Name} Subject: {eventToDecline.Subject}");
-                    }
+                    listEvents(eventsToDecline);
 
                     Console.WriteLine("\nEnter the index of the invite you wish to accept");
                     var indexToDecline = int.Parse(Console.ReadLine());
@@ -117,6 +113,16 @@ namespace Calendar
                 default:
                     Console.WriteLine("Invalid command");
                     break;
+            }
+        }
+
+        private static void listEvents(IUserEventsCollectionPage events)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Event anEvent= events[i];
+
+                Console.WriteLine($"Index: {i} Organiser: {anEvent.Organizer.EmailAddress.Name} Subject: {anEvent.Subject}");
             }
         }
 
