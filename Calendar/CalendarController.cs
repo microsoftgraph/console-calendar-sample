@@ -257,25 +257,47 @@ namespace Calendar
         /// </summary>
         /// <param name="eventSubject"></param>
         /// <returns></returns>
-        public async Task SetAllDayAsync(string eventSubject)
+        public async Task SetAllDayAsync(string eventSubject, string attendeeEmail, string date)
         {
+            // Adds attendee to the event
+            EmailAddress email = new EmailAddress
+            {
+                Address = attendeeEmail
+            };
+
+            Attendee attendee = new Attendee
+            {
+                EmailAddress = email,
+                Type = AttendeeType.Required,
+            };
+            List<Attendee> attendees = new List<Attendee>();
+            attendees.Add(attendee);
+
+            int day = int.Parse(date.Substring(0, 2));
+            int month = int.Parse(date.Substring(3, 2));
+            int year = int.Parse(date.Substring(6, 4));
+
+            Date allDayDate = new Date(year, month, day);
             DateTimeTimeZone start = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 12, 6).ToString()
+                DateTime = allDayDate.ToString()
             };
+
+            Date nextDay = new Date(year, month, day + 1);
             DateTimeTimeZone end = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = new Date(2018, 12, 8).ToString()
+                DateTime = nextDay.ToString()
             };
 
             Event newEvent = new Event
             {
                 Subject = eventSubject,
+                Attendees = attendees,
                 IsAllDay = true,
                 Start = start,
-                End = end,
+                End = end
             };
 
             try
@@ -286,7 +308,8 @@ namespace Calendar
                     .Request()
                     .AddAsync(newEvent);
 
-                Console.WriteLine($"Created {newEvent.Subject}");
+                Console.WriteLine($"Created an all day event: {newEvent.Subject}." +
+                    $" Happening on {date}");
             }
             catch (Exception error)
             {

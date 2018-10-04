@@ -86,7 +86,13 @@ namespace Calendar
                     Console.WriteLine("Enter the event's subject");
                     var allDaySubject = Console.ReadLine();
 
-                    await cal.SetAllDayAsync(allDaySubject);
+                    Console.WriteLine("Invite an attendee to this event, enter their email");
+                    var allDayAttendee = Console.ReadLine();
+
+                    Console.WriteLine("Enter the date of your event DD/MM/YYYY");
+                    var allDayDate = Console.ReadLine();
+
+                    await cal.SetAllDayAsync(allDaySubject, allDayAttendee, allDayDate);
                     break;
                 case "accept-event":
                     var eventsToAccept = await cal.GetEvents();
