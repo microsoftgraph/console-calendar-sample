@@ -167,6 +167,10 @@ namespace Calendar
         /// Sets recurrent events
         /// </summary>
         /// <param name="subject"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
         /// <returns></returns>
         public async Task SetRecurrentAsync(string subject, string startDate, string endDate, string startTime, string endTime)
         {
@@ -256,6 +260,8 @@ namespace Calendar
         /// Sets all day events
         /// </summary>
         /// <param name="eventSubject"></param>
+        /// <param name="attendeeEmail"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
         public async Task SetAllDayAsync(string eventSubject, string attendeeEmail, string date)
         {
