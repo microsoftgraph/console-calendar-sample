@@ -470,7 +470,7 @@ In this exercise you are going to set a recurring event.
         /// </summary>
         /// <param name="subject"></param>
         /// <returns></returns>
-        public async Task SetRecurrentAsync(string subject, string startTime, string endTime)
+        public async Task SetRecurrentAsync(string subject, string startDate, string endDate, string startTime, string endTime)
         {
             // Sets the event to happen every week
             RecurrencePattern pattern = new RecurrencePattern
@@ -493,11 +493,19 @@ In this exercise you are going to set a recurring event.
              * 
              * In this case the event runs from Nov 6th to Nov 26th 2018.
              **/
+            int startDay = int.Parse(startDate.Substring(0, 2));
+            int startMonth = int.Parse(startDate.Substring(3, 2));
+            int startYear = int.Parse(startDate.Substring(6, 4));
+
+            int endDay = int.Parse(endDate.Substring(0, 2));
+            int endMonth = int.Parse(endDate.Substring(3, 2));
+            int endYear = int.Parse(endDate.Substring(6, 4));
+
             RecurrenceRange range = new RecurrenceRange
             {
                 Type = RecurrenceRangeType.EndDate,
-                StartDate = new Date(2018, 11, 6),
-                EndDate = new Date(2018, 11, 26)
+                StartDate = new Date(startYear, startMonth, startDay),
+                EndDate = new Date(endYear, endMonth, endDay)
             };
 
             /**
@@ -515,21 +523,19 @@ In this exercise you are going to set a recurring event.
             DateTimeTimeZone start = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{startTime}:00:00"
+                DateTime = $"{startYear}-{startMonth}-{startDay}T{startTime}:00:00"
             };
 
             DateTimeTimeZone end = new DateTimeTimeZone
             {
                 TimeZone = "Pacific Standard Time",
-                DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{endTime}:00:00"
+                DateTime = $"{startYear}-{startMonth}-{startDay}T{startTime}:00:00"
             };
 
             Event eventObj = new Event
             {
                 Recurrence = recurrence,
                 Subject = subject,
-                Start = start,
-                End = end,
             };
 
             try
@@ -539,7 +545,8 @@ In this exercise you are going to set a recurring event.
                     .Events
                     .Request()
                     .AddAsync(eventObj);
-                Console.WriteLine($"Created {recurrentEvent.Subject}");
+                Console.WriteLine($"Created {recurrentEvent.Subject}," +
+                    $" happens every week on Monday from {startTime}:00 to {endTime}:00");
             }
             catch (Exception error)
             {
@@ -559,13 +566,19 @@ In this exercise you are going to set a recurring event.
         Console.WriteLine("Enter the event subject");
         var eventSubject = Console.ReadLine();
 
-        Console.WriteLine("Enter the start time of your event, in 24hr format 00 - 23");
-        var startTime = Console.ReadLine().Substring(0, 2);
+        Console.WriteLine("Enter the start date of your event DD/MM/YYYY");
+        var startDate = Console.ReadLine();
 
-        Console.WriteLine("Enter the end time of your event, in 24hr format 00 - 23");
-        var endTime = Console.ReadLine().Substring(0, 2);
+        Console.WriteLine("Enter the end date of your event DD/MM/YYYY");
+        var endDate = Console.ReadLine();
 
-        await cal.SetRecurrentAsync(eventSubject, startTime, endTime);
+        Console.WriteLine("Enter the start time of your event, in 24hr format 0000 - 2300");
+        var startRecurrent = Console.ReadLine().Substring(0, 2);
+
+        Console.WriteLine("Enter the end time of your event, in 24hr format 0000 - 2300");
+        var endRecurrent = Console.ReadLine().Substring(0, 2);
+
+        await cal.SetRecurrentAsync(eventSubject, startDate, endDate, startRecurrent, endRecurrent);
         break;
 ```
 
