@@ -20,6 +20,8 @@ namespace Helpers
 
         private static PublicClientApplication identityClientApp = new PublicClientApplication(clientId);
         private static GraphServiceClient graphClient = null;
+        private static AuthenticationResult authResult = null;
+
 
         // Get an access token for the given context and resourceId. An attempt is first made to acquire the token silently.
         // If that fails, then we try to acquire the token by prompting the user.
@@ -34,7 +36,7 @@ namespace Helpers
                         new DelegateAuthenticationProvider(
                                 async (requestMessage) =>
                                 {
-                                    var token = await getTokenForUserAsync();
+                                    var token = authResult!=  null ? authResult.AccessToken : await getTokenForUserAsync();
                                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
                                 }
                             ));
@@ -54,8 +56,6 @@ namespace Helpers
         /// <returns>Token for User</returns>
         private static async Task<string> getTokenForUserAsync()
         {
-            AuthenticationResult authResult = null;
-
             try
             {
                 IEnumerable<IAccount> account = await identityClientApp.GetAccountsAsync();

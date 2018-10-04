@@ -19,9 +19,9 @@ namespace Calendar
 
             Console.WriteLine("Available commands:\n" +
                 "\t 1. schedule-event \n " +
-                "\t 2. recurrent-event \n " +
+                "\t 2. schedule-recurrent-event \n " +
                 "\t 3. book-room \n " + 
-                "\t 4. allday-event \n " +
+                "\t 4. schedule-allday-event \n " +
                 "\t 5. accept-event \n " +
                 "\t 6. decline-event \n" +
                 "\t exit");
@@ -64,7 +64,7 @@ namespace Calendar
 
                     await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
-                case "recurrent-event":
+                case "schedule-recurrent-event":
                     Console.WriteLine("Enter the event subject");
                     var eventSubject = Console.ReadLine();
 
@@ -76,7 +76,7 @@ namespace Calendar
 
                     await cal.SetRecurrentAsync(eventSubject, startRecurrent, endRecurrent);
                     break;
-                case "allday-event":
+                case "schedule-allday-event":
                     Console.WriteLine("Enter the event's subject");
                     var allDaySubject = Console.ReadLine();
 
