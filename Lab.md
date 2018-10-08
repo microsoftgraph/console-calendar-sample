@@ -8,11 +8,12 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 - [Exercise 2: Register a native application with the Application Registration Portal](#exercise-2-register-a-native-application-with-the-application-registration-portal)
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
-- [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
-- [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-an-event)
-- [Exercise 7: Set a recurrent event](#-exercise-7-set-a-recurrent-event)
-- [Exercise 8: Set an all day event](#-exercise-8-set-an-all-day-event)
-- [Exercise 9: Decline an invite to an event](#-decline-an-invite-to-an-event)
+- [Exercise 5: Schedule an event with Graph SDK](#exercise-5-schedule-an-event-with-graph-sdk)
+- [Exercise 6: Book a room for an event](#exercise-6-book-a-room-for-an-event)
+- [Exercise 7: Schedule a recurrent event](#exercise-7-schedule-a-recurrent-event)
+- [Exercise 8: Schedule an all day event](#exercise-8-schedule-an-all-day-event)
+- [Exercise 9: Accept an invite to an event](#exercise-9-accept-an-invite-to-an-event) 
+- [Exercise 10: Decline an invite to an event](#exercise-10-decline-an-invite-to-an-event)
 
 ## Prerequisites
 
@@ -460,7 +461,7 @@ case "book-room":
 
 This prompts the user to enter the **eventId** and **resource email**.
 
-## Exercise 7: Set a recurrent event
+## Exercise 7: Schedule a recurrent event
 In this exercise you are going to set a recurring event.
 
 1. Add the code below to **CalendarController.cs**
@@ -586,7 +587,7 @@ In this exercise you are going to set a recurring event.
         break;
 ```
 
-## Exercise 8: Set an all day event
+## Exercise 8: Schedule an all day event
 In this exercise you're going to create an all day event.
 
 1. Add the code below to **CalendarController.cs**
@@ -680,7 +681,7 @@ In this exercise you're going to create an all day event.
         break;
 ```
 
-## Exercise 8: Accept an invite to an event
+## Exercise 9: Accept an invite to an event
 In this exercise you are going to accept an invite to an event.
 
 1. Add the code below to **CalendarController.cs**
@@ -746,7 +747,7 @@ In this exercise you are going to accept an invite to an event.
 		break;
 ```
 
-## Exercise 9: Decline an invite to an event
+## Exercise 10: Decline an invite to an event
 In this exercise you are going to decline an invite to an event.
 
 1. Add the code below to **CalendarController.cs**
