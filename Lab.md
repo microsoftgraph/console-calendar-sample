@@ -4,12 +4,12 @@
 In this lab you will create a .NET application, configured with Azure Active Directory (Azure AD) for authentication and authorization using Microsoft Authentication Library (MSAL).
 
 ## In this lab
-- [Exercise 1: Create a CLI application](#create-cli-application)
+- [Exercise 1: Create a CLI application](#exercise-1-create-a-cli-application)
 - [Exercise 2: Register a native application with the Application Registration Portal](#exercise-2-register-a-native-application-with-the-application-registration-portal)
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
 - [Exercise 5: Schedule an event with Graph SDK](#-exercise-5-schedule-an-event-with-graph-sdk)
-- [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-event)
+- [Exercise 6: Book a room for an event](#-exercise-6-book-a-room-for-an-event)
 - [Exercise 7: Set a recurrent event](#-exercise-7-set-a-recurrent-event)
 - [Exercise 8: Set an all day event](#-exercise-8-set-an-all-day-event)
 - [Exercise 9: Decline an invite to an event](#-decline-an-invite-to-an-event)
@@ -25,7 +25,7 @@ If you don't have a Microsoft account, there are a couple of options to get a fr
 * You can [sign up for a new personal Microsoft account](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=12&ct=1454618383&rver=6.4.6456.0&wp=MBI_SSL_SHARED&wreply=https://mail.live.com/default.aspx&id=64855&cbcxt=mai&bk=1454618383&uiflavor=web&uaid=b213a65b4fdc484382b6622b3ecaa547&mkt=E-US&lc=1033&lic=1)
 * You can [sign up for the Office 365 Developer Program](https://developer.microsoft.com/office/dev-program) to get  a free Office 365 subscription
 
-## Exercise 1: Create a .NET application
+## Exercise 1: Create a CLI application
 
 Open Visual Studio, and select **File > New > Project.** In the **New Project** dialog, do the following:
 1. Select **Visual C# > Get Started**.
