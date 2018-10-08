@@ -4,12 +4,7 @@ This module will introduce you to working with the Microsoft Graph .NET SDK to i
 # Lab - Use Microsoft Graph .NET SDK to interact with Outlook Calendar
 In this lab you will create a .NET Core CLI application, configured with Azure Active Directory(Azure AD) for authentication & authorization that accesses data in Office 365 using the Microsoft Graph.
 
-* [Lab manual]()
-
-## Demos
-- [Create a CLI app]()
-- [Register application with the Application Registration Portal]()
-- [Use Microsoft Graph to get user information]()
+* [Lab manual](./Lab.md)
 
 ## Contributors
 
