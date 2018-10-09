@@ -47,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestCalender, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\TestCalender\bin\Debug\TestCalender.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalendarController.cs" />

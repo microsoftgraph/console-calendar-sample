@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Calendar
 {
-    class CalendarController
+    public class CalendarController
     {
         GraphServiceClient graphClient;
 
@@ -25,8 +25,10 @@ namespace Calendar
         /// <param name="endTime">Duration of the meeting</param>
         /// <param name="attendeeEmail">Email of person to invite</param>
         /// <returns></returns>
-        public async Task ScheduleEventAsync(string subject, string startTime, string endTime, string attendeeEmail)
+        public async Task<Event> ScheduleEventAsync(string subject, string startTime, string endTime, string attendeeEmail)
         {
+            Event calendarEvent = null;
+            
             DateTime dateTime = DateTime.Today;
 
             // set the start and end time for the event
@@ -92,7 +94,7 @@ namespace Calendar
                  * Learn more about the properties of an Event object in the link below
                  * https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/event
                  * */
-                Event calendarEvent = await graphClient
+                calendarEvent = await graphClient
                     .Me
                     .Events
                     .Request()
@@ -105,6 +107,7 @@ namespace Calendar
                 Console.WriteLine(error.Message);
             }
 
+            return calendarEvent;
         }
 
         /// <summary>

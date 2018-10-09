@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Helpers
 {
-    class GraphServiceClientProvider
+    public class GraphServiceClientProvider
     {
         // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
-        private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
+        private static string clientId = ConfigurationManager.AppSettings["clientId"];
         private static string[] scopes = {
             "https://graph.microsoft.com/User.Read",
             "https://graph.microsoft.com/Calendars.ReadWrite"
