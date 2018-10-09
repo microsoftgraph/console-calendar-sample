@@ -66,6 +66,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Calendar\App.config">
+      <Link>App.config</Link>
+    </Content>
     <Content Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
