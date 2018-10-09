@@ -1,0 +1,8 @@
+language: csharp
+solution: Calendar.sln
+install:
+  - nuget restore Calendar.sln
+  - nuget install NUnit.Runners -Version X.X.X -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release Calendar.sln
+  - mono ./testrunner/NUnit.Runners.X.X.X/tools/nunit-console.exe ./TestCalendar/bin/Release/TestCalendar.dll
