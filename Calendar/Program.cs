@@ -13,27 +13,41 @@ namespace Calendar
 
         static void Main(string[] args)
         {
+            bool loginCancelled = false;
+
             graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
-            RunAsync().GetAwaiter().GetResult();
 
-            Console.WriteLine("Available commands:\n" +
-                "\t 1. schedule-event \n " +
-                "\t 2. schedule-recurrent-event \n " +
-                "\t 3. book-room \n " + 
-                "\t 4. schedule-allday-event \n " +
-                "\t 5. accept-event \n " +
-                "\t 6. decline-event \n" +
-                "\t exit");
-            var command = "";
-
-            do
+            try
             {
-                Console.Write("> ");
-                command = Console.ReadLine();
-                if (command != "exit") runAsync(command).GetAwaiter().GetResult();
+                RunAsync().GetAwaiter().GetResult();
+                loginCancelled = true;
             }
-            while (command != "exit");
+            catch (Exception ex)
+            {
+                Console.Write("User cancelled login, press enter to exit...");
+                Console.ReadLine();
+            }
+            if (loginCancelled == true)
+            {
+                Console.WriteLine("Available commands:\n" +
+                    "\t 1. schedule-event \n " +
+                    "\t 2. schedule-recurrent-event \n " +
+                    "\t 3. book-room \n " +
+                    "\t 4. schedule-allday-event \n " +
+                    "\t 5. accept-event \n " +
+                    "\t 6. decline-event \n" +
+                    "\t exit");
+                var command = "";
+
+                do
+                {
+                    Console.Write("> ");
+                    command = Console.ReadLine();
+                    if (command != "exit") runAsync(command).GetAwaiter().GetResult();
+                }
+                while (command != "exit");
+            }
         }
 
         private static async Task runAsync(string command)
