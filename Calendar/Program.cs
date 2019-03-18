@@ -13,7 +13,8 @@ namespace Calendar
 
         static void Main(string[] args)
         {
-            graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+            // graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+            graphClient = AuthenticationHelper.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
             RunAsync().GetAwaiter().GetResult();
 

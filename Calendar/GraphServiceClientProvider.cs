@@ -36,7 +36,7 @@ namespace Helpers
                         new DelegateAuthenticationProvider(
                                 async (requestMessage) =>
                                 {
-                                    var token = authResult!=  null ? authResult.AccessToken : await getTokenForUserAsync();
+                                    var token = authResult!=  null ? authResult.AccessToken : await GetTokenForUserAsync();
                                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
                                 }
                             ));
@@ -54,7 +54,7 @@ namespace Helpers
         /// Get token for User
         /// </summary>
         /// <returns>Token for User</returns>
-        private static async Task<string> getTokenForUserAsync()
+        private static async Task<string> GetTokenForUserAsync()
         {
             try
             {
