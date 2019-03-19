@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="AuthenticationHelper.cs" />
     <Compile Include="CalendarController.cs" />
-    <Compile Include="GraphServiceClientProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

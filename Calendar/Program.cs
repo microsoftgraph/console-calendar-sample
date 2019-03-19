@@ -1,4 +1,3 @@
-using Helpers;
 using Microsoft.Graph;
 using System;
 using System.Diagnostics;
@@ -12,8 +11,7 @@ namespace Calendar
         private static CalendarController cal;
 
         static void Main(string[] args)
-        {
-            // graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+        {            
             graphClient = AuthenticationHelper.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
             RunAsync().GetAwaiter().GetResult();
@@ -42,6 +40,7 @@ namespace Calendar
             switch (command)
             {
                 case "schedule-event":
+                case "1":
                     Console.WriteLine("Enter the subject of your event");
                     var subject = Console.ReadLine();
 
@@ -57,6 +56,7 @@ namespace Calendar
                     await cal.ScheduleEventAsync(subject, startTime, endTime, attendee);
                     break;
                 case "book-room":
+                case "3":
                     Console.WriteLine("Enter the event id");
                     var eventId = Console.ReadLine();
 
@@ -66,6 +66,7 @@ namespace Calendar
                     await cal.BookRoomAsync(eventId, resourceEmail);
                     break;
                 case "schedule-recurrent-event":
+                case "2":
                     Console.WriteLine("Enter the event subject");
                     var eventSubject = Console.ReadLine();
 
@@ -84,6 +85,7 @@ namespace Calendar
                     await cal.SetRecurrentAsync(eventSubject, startDate, endDate, startRecurrent, endRecurrent);
                     break;
                 case "schedule-allday-event":
+                case "4":
                     Console.WriteLine("Enter the event's subject");
                     var allDaySubject = Console.ReadLine();
 
@@ -96,6 +98,7 @@ namespace Calendar
                     await cal.SetAllDayAsync(allDaySubject, allDayAttendee, allDayDate);
                     break;
                 case "accept-event":
+                case "5":
                     var eventsToAccept = await cal.GetEvents();
 
                     listEvents(eventsToAccept);
@@ -107,6 +110,7 @@ namespace Calendar
                     Console.WriteLine("Invite accepted!");
                     break;
                 case "decline-event":
+                case "6":
                     var eventsToDecline = await cal.GetEvents();
 
                     listEvents(eventsToDecline);
@@ -142,7 +146,7 @@ namespace Calendar
             User currentUser = null;
             try
             {
-                var graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
+                var graphClient = AuthenticationHelper.GetAuthenticatedClient();
 
                 // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();
