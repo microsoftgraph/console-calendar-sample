@@ -49,7 +49,7 @@ Install-Package "System.Configuration.ConfigurationManager"
 ## Exercise 2: Register a native application with the Azure portal
 In this exercise, you will create a new Azure AD native application using the Application Registry Portal.
 
-1. Open a browser and navigate to the [Azure portal app registrations page](). Login using a **personal account**(aka: Microsoft Account) or **Work or School Account**.
+1. Open a browser and navigate to the [Azure portal app registrations page](https://aka.ms/AppRegistrations). Login using a **personal account** (aka: Microsoft Account) or **Work or School Account**.
 2. Select **New registration** at the top of the page.
 3. On the Register an application page, set the **Application Name** to **Calendar**. Under "Supported account types", choose **Accounts in any organizational directory and personal Microsoft accounts**.
 4. Select **Register** at the bottom of the page.
@@ -64,7 +64,7 @@ to call the Microsoft Graph.
 Edit the **app.config** file, and immediately before the `/configuration` element, add the following element:
 ```xml
 <appSettings>
-    <add key="clientId" value="THE_APPLICATION_ID_YOU_COPIED_IN_EXERCISE_2">
+    <add key="clientId" value="ENTER_APPLICATION_ID">
 </appSettings>
 ```
 
@@ -348,7 +348,7 @@ class CalendarController
             }
             while (command != "exit");
 ```
-This allows the user interact with your application through the command line interface.
+This allows the user to interact with your application through the command line interface.
 
 2. Add this function below **Main**
 ```csharp
