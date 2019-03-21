@@ -5,7 +5,7 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 
 ## In this lab
 - [Exercise 1: Create a CLI application](#exercise-1-create-a-cli-application)
-- [Exercise 2: Register a native application with the Application Registration Portal](#exercise-2-register-a-native-application-with-the-application-registration-portal)
+- [Exercise 2: Register a native application with the Azure portal](#exercise-2-register-a-native-application-with-the-azure-portal)
 - [Exercise 3: Extend the app for Azure AD Authentication](#exercise-3-extend-the-app-for-azure-ad-authentication)
 - [Exercise 4: Extend the app for Microsoft Graph](#exercise-4-extend-the-app-for-microsoft-graph)
 - [Exercise 5: Schedule an event with Graph SDK](#exercise-5-schedule-an-event-with-graph-sdk)
@@ -19,12 +19,11 @@ In this lab you will create a .NET application, configured with Azure Active Dir
 
 To complete this lab, you need the following:
 
-* [Visual Studio](https://visualstudio.microsoft.com/vs/) installed on your development machine.(**Note**: This tutorial was written with Visual Studio 2017 version 15.8.3. 
-The steps in this guide may work with other versions, but that has not been tested).
+- [Visual Studio](https://visualstudio.microsoft.com/vs/) installed on your development machine. (**Note**: This tutorial was written with Visual Studio 2017 version 15.8.3.)
 
 If you don't have a Microsoft account, there are a couple of options to get a free account:
-* You can [sign up for a new personal Microsoft account](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=12&ct=1454618383&rver=6.4.6456.0&wp=MBI_SSL_SHARED&wreply=https://mail.live.com/default.aspx&id=64855&cbcxt=mai&bk=1454618383&uiflavor=web&uaid=b213a65b4fdc484382b6622b3ecaa547&mkt=E-US&lc=1033&lic=1)
-* You can [sign up for the Office 365 Developer Program](https://developer.microsoft.com/office/dev-program) to get  a free Office 365 subscription
+- You can [sign up for a new personal Microsoft account](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=12&ct=1454618383&rver=6.4.6456.0&wp=MBI_SSL_SHARED&wreply=https://mail.live.com/default.aspx&id=64855&cbcxt=mai&bk=1454618383&uiflavor=web&uaid=b213a65b4fdc484382b6622b3ecaa547&mkt=E-US&lc=1033&lic=1)
+- You can [sign up for the Office 365 Developer Program](https://developer.microsoft.com/office/dev-program) to get  a free Office 365 subscription
 
 ## Exercise 1: Create a CLI application
 
@@ -33,11 +32,8 @@ Open Visual Studio, and select **File > New > Project.** In the **New Project** 
 2. Select **Console App**.
 3. Enter **Calendar** for the name of the project.
 
-
-#### Important
-
-Ensure that you enter the exact name for the Visual Studio Project that is specified in these lab instructions. The project name will also be the **namespace**. If you used a different project name
-adjust all the namespaces to match your project name.
+> ### Important
+> Ensure that you enter the exact name for the Visual Studio Project that is specified in these lab instructions. The project name will also be the **namespace**. If you used a different project name, adjust all the namespaces to match your project name.
 
 Press **Ctrl + F5** to run the application or **Debug > Start Debugging** to run the application in debug mode. If everything is working fine a terminal window will open.
 
@@ -46,24 +42,26 @@ Before moving on, install additional NuGet packages that you will use later.
 Select **Tools > Nuget Package Manager > Package Manager Console**. In the console window, run the following commands:
 ```powershell
 Install-Package "Microsoft Graph"
-Install-Package "Microsoft.Identity.Client" -pre
+Install-Package "Microsoft.Identity.Client"
 Install-Package "System.Configuration.ConfigurationManager"
 ```
 
-## Exercise 2: Register a native application with the Application Registration Portal
+## Exercise 2: Register a native application with the Azure portal
 In this exercise, you will create a new Azure AD native application using the Application Registry Portal.
-1. Open a browser and navigate to the [Application Registration Portal](). Login using a **personal account**(aka: Microsoft Account) or **Work or School Account**
-2. Select **Add an app** at the top of the page
-3. On the Register your application page, set the **Applcaiton Name** to **Calendar** and select **Create**
-4. On the **Calendar Registration** page, under the **Properties** section, copy the **Application Id** as you will need it later
-5. Select **Add Platform** button on the registration page. Choose **Native Application** in the dialog box.
-6. Once completed, move to the bottom of the page and select **Save**
+
+1. Open a browser and navigate to the [Azure portal app registrations page](). Login using a **personal account**(aka: Microsoft Account) or **Work or School Account**.
+2. Select **New registration** at the top of the page.
+3. On the Register an application page, set the **Application Name** to **Calendar**. Under "Supported account types", choose **Accounts in any organizational directory and personal Microsoft accounts**.
+4. Select **Register** at the bottom of the page.
+5. On the **Calendar** page, copy the **Application (client) ID** as you will need it later.
+6. Go to the **Authentication** page. Under **Suggested Redirect URIs for public clients (mobile, desktop)** check the boxes next to **urn:ietf:wg:oauth:2.0:oob**  and **https://login.microsoftonline.com/common/oauth2/nativeclient**.
+7. Choose **Save** near the top of the Authentication page.
 
 ## Exercise 3: Extend the app for Azure AD Authentication
 In this exercise you will extend the application from **Exercise 1** to support authentication with Azure AD. This is required to obtain the necessary OAuth token
 to call the Microsoft Graph.
 
-Edit the **app.config** file, and immeadiately before the `/configuration` element, add the following element:
+Edit the **app.config** file, and immediately before the `/configuration` element, add the following element:
 ```xml
 <appSettings>
     <add key="clientId" value="THE_APPLICATION_ID_YOU_COPIED_IN_EXERCISE_2">
@@ -91,8 +89,8 @@ using System.Threading.Tasks;
 class GraphClientServiceProvider
     {
         // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
-        private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
-        private static string[] scopes = {
+        private static readonly string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
+        private static readonly string[] scopes = {
             "https://graph.microsoft.com/User.Read"
         };
 
@@ -112,7 +110,7 @@ class GraphClientServiceProvider
                         new DelegateAuthenticationProvider(
                                 async (requestMessage) =>
                                 {
-                                    var token = await getTokenForUserAsync();
+                                    var token = await GetTokenForUserAsync();
                                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
                                 }
                             ));
@@ -130,7 +128,7 @@ class GraphClientServiceProvider
         /// Get token for User
         /// </summary>
         /// <returns>Token for User</returns>
-        private static async Task<string> getTokenForUserAsync()
+        private static async Task<string> GetTokenForUserAsync()
         {
             AuthenticationResult authResult = null;
 
@@ -140,7 +138,7 @@ class GraphClientServiceProvider
                 authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
                 return authResult.AccessToken;
             }
-            catch(MsalUiRequiredException error)
+            catch(MsalUiRequiredException)
             {
                 // This means the AcquireTokenSilentAsync threw an exception. 
                 // This prompts the user to log in with their account so that we can get the token.

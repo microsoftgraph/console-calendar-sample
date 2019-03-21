@@ -12,8 +12,8 @@ namespace Helpers
     class GraphServiceClientProvider
     {
         // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
-        private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
-        private static string[] scopes = {
+        private static readonly string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
+        private static readonly string[] scopes = {
             "https://graph.microsoft.com/User.Read",
             "https://graph.microsoft.com/Calendars.ReadWrite"
         };
@@ -36,7 +36,7 @@ namespace Helpers
                         new DelegateAuthenticationProvider(
                                 async (requestMessage) =>
                                 {
-                                    var token = authResult!=  null ? authResult.AccessToken : await getTokenForUserAsync();
+                                    var token = authResult!=  null ? authResult.AccessToken : await GetTokenForUserAsync();
                                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
                                 }
                             ));
@@ -54,7 +54,7 @@ namespace Helpers
         /// Get token for User
         /// </summary>
         /// <returns>Token for User</returns>
-        private static async Task<string> getTokenForUserAsync()
+        private static async Task<string> GetTokenForUserAsync()
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Helpers
                 authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
                 return authResult.AccessToken;
             }
-            catch (MsalUiRequiredException error)
+            catch (MsalUiRequiredException)
             {
                 // This means the AcquireTokenSilentAsync threw an exception. 
                 // This prompts the user to log in with their account so that we can get the token.

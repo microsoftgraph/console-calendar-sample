@@ -31,12 +31,12 @@ namespace Calendar
             {
                 Console.Write("> ");
                 command = Console.ReadLine();
-                if (command != "exit") runAsync(command).GetAwaiter().GetResult();
+                if (command != "exit") RunAsync(command).GetAwaiter().GetResult();
             }
             while (command != "exit");
         }
 
-        private static async Task runAsync(string command)
+        private static async Task RunAsync(string command)
         {
             switch (command)
             {
@@ -97,7 +97,7 @@ namespace Calendar
                 case "accept-event":
                     var eventsToAccept = await cal.GetEvents();
 
-                    listEvents(eventsToAccept);
+                    ListEvents(eventsToAccept);
 
                     Console.WriteLine("\nEnter the index of the invite you wish to accept");
                     var indexToAccept = int.Parse(Console.ReadLine());
@@ -108,7 +108,7 @@ namespace Calendar
                 case "decline-event":
                     var eventsToDecline = await cal.GetEvents();
 
-                    listEvents(eventsToDecline);
+                    ListEvents(eventsToDecline);
 
                     Console.WriteLine("\nEnter the index of the invite you wish to accept");
                     var indexToDecline = int.Parse(Console.ReadLine());
@@ -122,7 +122,7 @@ namespace Calendar
             }
         }
 
-        private static void listEvents(IUserEventsCollectionPage events)
+        private static void ListEvents(IUserEventsCollectionPage events)
         {
             for (int i = 0; i < 5; i++)
             {
