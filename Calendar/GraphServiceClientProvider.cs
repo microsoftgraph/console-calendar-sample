@@ -1,75 +1,50 @@
-﻿using Microsoft.Graph;
-using Microsoft.Identity.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Linq;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
 using System.Threading.Tasks;
+using System.Configuration;
+using System.Net.Http.Headers;
+using System.Diagnostics;
+using Microsoft.Graph.Auth;
 
-namespace Helpers
+namespace Calendar
 {
-    class GraphServiceClientProvider
+    public class GraphServiceClientProvider
     {
-        // The client ID is used by the application to uniquely identify itself to the authentication endpoint.
-        private static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
+        // The Client ID is used by the application to uniquely identify itself to the v2.0 authentication endpoint.
+        static string clientId = ConfigurationManager.AppSettings["clientId"].ToString();
         private static string[] scopes = {
-            "https://graph.microsoft.com/User.Read",
-            "https://graph.microsoft.com/Calendars.ReadWrite"
+            "User.Read",
+            "Calendars.ReadWrite"
         };
-
-        private static PublicClientApplication identityClientApp = new PublicClientApplication(clientId);
+              
         private static GraphServiceClient graphClient = null;
-        private static AuthenticationResult authResult = null;
 
-
-        // Get an access token for the given context and resourceId. An attempt is first made to acquire the token silently.
-        // If that fails, then we try to acquire the token by prompting the user.
+        // Get an access token for the given context and resourceId. An attempt is first made to
+        // acquire the token silently. If that fails, then we try to acquire the token by prompting the user.
         public static GraphServiceClient GetAuthenticatedClient()
         {
             if (graphClient == null)
             {
+                // Create Microsoft Graph client.
                 try
                 {
-                    graphClient = new GraphServiceClient(
-                        "https://graph.microsoft.com/v1.0",
-                        new DelegateAuthenticationProvider(
-                                async (requestMessage) =>
-                                {
-                                    var token = authResult!=  null ? authResult.AccessToken : await getTokenForUserAsync();
-                                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
-                                }
-                            ));
+                    IPublicClientApplication clientApplication = InteractiveAuthenticationProvider.CreateClientApplication(clientId);
+                    InteractiveAuthenticationProvider authProvider = new InteractiveAuthenticationProvider(clientApplication, scopes);
+
+                    graphClient = new GraphServiceClient(authProvider);
                     return graphClient;
                 }
-                catch (Exception error)
+
+                catch (Exception ex)
                 {
-                    Debug.WriteLine($"Could not create a graph client {error.Message}");
+                    Debug.WriteLine("Could not create a graph client: " + ex.Message);
                 }
             }
+
             return graphClient;
         }
-
-        /// <summary>
-        /// Get token for User
-        /// </summary>
-        /// <returns>Token for User</returns>
-        private static async Task<string> getTokenForUserAsync()
-        {
-            try
-            {
-                IEnumerable<IAccount> account = await identityClientApp.GetAccountsAsync();
-                authResult = await identityClientApp.AcquireTokenSilentAsync(scopes, account as IAccount);
-                return authResult.AccessToken;
-            }
-            catch (MsalUiRequiredException error)
-            {
-                // This means the AcquireTokenSilentAsync threw an exception. 
-                // This prompts the user to log in with their account so that we can get the token.
-                authResult = await identityClientApp.AcquireTokenAsync(scopes);
-                return authResult.AccessToken;
-            }
-        }
-
     }
 }
