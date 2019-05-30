@@ -11,15 +11,15 @@ namespace Calendar
         private static CalendarController cal;
 
         static void Main(string[] args)
-        {            
-            graphClient = AuthenticationHelper.GetAuthenticatedClient();
+        {
+            graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
             cal = new CalendarController(graphClient);
             RunAsync().GetAwaiter().GetResult();
 
             Console.WriteLine("Available commands:\n" +
                 "\t 1. schedule-event \n " +
                 "\t 2. schedule-recurrent-event \n " +
-                "\t 3. book-room \n " + 
+                "\t 3. book-room \n " +
                 "\t 4. schedule-allday-event \n " +
                 "\t 5. accept-event \n " +
                 "\t 6. decline-event \n" +
@@ -131,7 +131,7 @@ namespace Calendar
         {
             for (int i = 0; i < 5; i++)
             {
-                Event anEvent= events[i];
+                Event anEvent = events[i];
 
                 Console.WriteLine($"Index: {i} Organiser: {anEvent.Organizer.EmailAddress.Name} Subject: {anEvent.Subject}");
             }
@@ -146,7 +146,7 @@ namespace Calendar
             User currentUser = null;
             try
             {
-                var graphClient = AuthenticationHelper.GetAuthenticatedClient();
+                graphClient = GraphServiceClientProvider.GetAuthenticatedClient();
 
                 // Request to get the current logged in user object from Microsoft Graph
                 currentUser = await graphClient.Me.Request().GetAsync();

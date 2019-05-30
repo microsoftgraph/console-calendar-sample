@@ -39,7 +39,7 @@ namespace Calendar
             {
                 TimeZone = "Pacific Standard Time",
                 DateTime = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day}T{endTime}:00:00"
-            };
+            };            
 
             // Adds attendee to the event
             EmailAddress email = new EmailAddress
